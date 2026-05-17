@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PrepAI — Interview & English Practice</title>
+<title>PrepAI — Live Voice English Coach</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
@@ -15,6 +15,7 @@
   .orb1{width:500px;height:500px;background:rgba(124,110,247,0.08);top:-150px;right:-100px}
   .orb2{width:400px;height:400px;background:rgba(62,207,142,0.05);bottom:-100px;left:-80px}
   .app{position:relative;z-index:1;display:flex;min-height:100vh}
+
   /* SIDEBAR */
   .sidebar{width:265px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden}
   .logo{padding:26px 22px 18px;border-bottom:1px solid var(--border)}
@@ -29,6 +30,7 @@
   .nav-item.active{background:var(--accent-glow);color:var(--accent2);border-color:rgba(124,110,247,0.2)}
   .nav-icon{font-size:17px;flex-shrink:0}
   .nav-badge{margin-left:auto;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+
   /* KEY MANAGER */
   .key-manager{padding:12px 14px;border-top:1px solid var(--border)}
   .key-manager-title{font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
@@ -55,6 +57,7 @@
   .user-info{flex:1;min-width:0}
   .user-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .user-role{font-size:11px;color:var(--text3)}
+
   /* MAIN */
   .main{flex:1;display:flex;flex-direction:column;min-width:0}
   .topbar{padding:15px 26px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:rgba(10,10,15,0.85);backdrop-filter:blur(12px);position:sticky;top:0;z-index:10}
@@ -62,8 +65,10 @@
   .status-pill{display:flex;align-items:center;gap:6px;padding:5px 13px;border-radius:30px;font-size:12px;font-weight:500;transition:all 0.3s}
   .sp-online{background:var(--green-soft);border:1px solid rgba(62,207,142,0.2);color:var(--green)}
   .sp-warn{background:var(--amber-soft);border:1px solid rgba(240,166,84,0.2);color:var(--amber)}
+  .sp-listening{background:rgba(232,85,85,0.12);border:1px solid rgba(232,85,85,0.2);color:var(--red)}
+  .sp-speaking{background:var(--accent-glow);border:1px solid rgba(124,110,247,0.2);color:var(--accent2)}
   .status-dot{width:7px;height:7px;border-radius:50%;animation:pulse 2s infinite}
-  .dot-green{background:var(--green)}.dot-amber{background:var(--amber)}
+  .dot-green{background:var(--green)}.dot-amber{background:var(--amber)}.dot-red{background:var(--red)}.dot-purple{background:var(--accent)}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
   .btn{padding:7px 15px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;border:none;outline:none}
   .btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text2)}
@@ -71,9 +76,11 @@
   .btn-primary{background:var(--accent);color:#fff;box-shadow:0 0 16px rgba(124,110,247,0.25)}
   .btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
   .btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
   /* PAGES */
   .page{display:none;flex:1}
   .page.active{display:flex;flex-direction:column}
+
   /* DASHBOARD */
   .dash-content{padding:30px;flex:1;overflow-y:auto}
   .hero-card{background:linear-gradient(135deg,#1a1730 0%,#1a2035 100%);border:1px solid rgba(124,110,247,0.2);border-radius:20px;padding:34px;margin-bottom:26px;position:relative;overflow:hidden}
@@ -106,14 +113,17 @@
   .feature-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:5px}
   .feature-desc{font-size:12.5px;color:var(--text2);line-height:1.5}
   .soon-tag{position:absolute;top:13px;right:13px;background:var(--amber-soft);border:1px solid rgba(240,166,84,0.2);color:var(--amber);font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase}
-  .upload-zone{border:2px dashed var(--border2);border-radius:var(--r2);padding:30px;text-align:center;cursor:pointer;background:rgba(255,255,255,0.01);transition:all 0.2s}
-  .upload-zone:hover{border-color:var(--accent);background:var(--accent-glow)}
-  /* PRACTICE PAGE */
-  .practice-layout{display:grid;grid-template-columns:285px 1fr;height:calc(100vh - 57px);overflow:hidden}
-  .practice-sidebar{border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+
+  /* ═══════════════════════════════════════
+     VOICE PRACTICE PAGE
+  ═══════════════════════════════════════ */
+  .voice-layout{display:grid;grid-template-columns:285px 1fr;height:calc(100vh - 57px);overflow:hidden}
+  .voice-sidebar{border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
   .agent-card{padding:20px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,rgba(124,110,247,0.05),transparent)}
   .agent-av-wrap{position:relative;display:inline-block;margin-bottom:13px}
-  .agent-av{width:58px;height:58px;background:linear-gradient(135deg,var(--accent),var(--pink));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:25px;box-shadow:0 0 22px rgba(124,110,247,0.3)}
+  .agent-av{width:58px;height:58px;background:linear-gradient(135deg,var(--accent),var(--pink));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:25px;box-shadow:0 0 22px rgba(124,110,247,0.3);transition:box-shadow 0.3s}
+  .agent-av.speaking{box-shadow:0 0 40px rgba(124,110,247,0.7),0 0 0 8px rgba(124,110,247,0.15);animation:agentPulse 1s ease-in-out infinite}
+  @keyframes agentPulse{0%,100%{box-shadow:0 0 30px rgba(124,110,247,0.6),0 0 0 6px rgba(124,110,247,0.15)}50%{box-shadow:0 0 55px rgba(124,110,247,0.9),0 0 0 14px rgba(124,110,247,0.08)}}
   .agent-online{position:absolute;bottom:2px;right:2px;width:12px;height:12px;background:var(--green);border-radius:50%;border:2px solid var(--bg2)}
   .agent-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:2px}
   .agent-role{font-size:11px;color:var(--text3);margin-bottom:9px}
@@ -125,7 +135,7 @@
   .topic-item:hover{background:var(--card);color:var(--text)}
   .topic-item.active{background:var(--accent-glow);color:var(--accent2);border-color:rgba(124,110,247,0.2)}
   .topic-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-  .corrections-panel{border-top:1px solid var(--border);max-height:195px;overflow-y:auto;padding:12px}
+  .corrections-panel{border-top:1px solid var(--border);max-height:200px;overflow-y:auto;padding:12px}
   .corrections-title{font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
   .correction-count{background:var(--amber-soft);border:1px solid rgba(240,166,84,0.2);color:var(--amber);font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px}
   .correction-item{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:9px;margin-bottom:7px;font-size:11.5px}
@@ -133,13 +143,20 @@
   .corr-right{color:var(--green);font-weight:500;margin-bottom:3px}
   .corr-why{color:var(--text3);font-style:italic;line-height:1.4}
   .no-corrections{text-align:center;color:var(--text3);font-size:12px;padding:12px}
-  /* CHAT */
-  .chat-area{display:flex;flex-direction:column;overflow:hidden}
-  .chat-topbar{padding:11px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+
+  /* VOICE MAIN AREA */
+  .voice-main{display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+
+  /* TOP BAR */
+  .voice-topbar{padding:11px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
   .chat-topic-label{font-size:12px;color:var(--text2)}
   .chat-topic-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--accent2)}
   .spacer{flex:1}
-  .messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px;scroll-behavior:smooth}
+
+  /* TRANSCRIPT AREA */
+  .transcript{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px;scroll-behavior:smooth}
+
+  /* MESSAGES */
   .msg{display:flex;gap:10px;max-width:77%;animation:msgIn 0.28s cubic-bezier(0.34,1.56,0.64,1)}
   .msg.user{align-self:flex-end;flex-direction:row-reverse}
   @keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -158,49 +175,67 @@
   .cb-wrong{color:var(--red);text-decoration:line-through;margin-bottom:2px}
   .cb-right{color:var(--green);font-weight:500;margin-bottom:4px}
   .cb-why{color:var(--text2);line-height:1.5;font-style:italic}
-  /* SYSTEM MSG */
   .sys-msg{align-self:center;background:rgba(124,110,247,0.08);border:1px solid rgba(124,110,247,0.2);border-radius:20px;padding:7px 16px;font-size:12px;color:var(--accent2);display:flex;align-items:center;gap:6px;animation:msgIn 0.25s ease}
-  /* RATE LIMIT BANNER */
-  .rate-banner{background:linear-gradient(135deg,rgba(232,85,85,0.09),rgba(240,166,84,0.05));border:1px solid rgba(232,85,85,0.2);border-radius:var(--r2);padding:15px 18px;margin:0 20px 10px;display:flex;align-items:flex-start;gap:13px;flex-shrink:0;animation:msgIn 0.3s ease}
-  .rate-banner.hidden{display:none}
-  .rb-icon{font-size:22px;flex-shrink:0;margin-top:2px}
-  .rb-text{flex:1}
-  .rb-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--red);margin-bottom:3px}
-  .rb-desc{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:10px}
-  .rb-row{display:flex;gap:8px;align-items:center}
-  .rb-input{flex:1;background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:8px 11px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);outline:none;transition:border-color 0.2s}
-  .rb-input:focus{border-color:var(--accent)}
-  .rb-input::placeholder{color:var(--text3)}
-  .rb-btn{background:var(--accent);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:600;padding:8px 15px;cursor:pointer;white-space:nowrap;transition:background 0.2s}
-  .rb-btn:hover{background:var(--accent2)}
-  /* TYPING */
+
+  /* VOICE CONTROLS — the centerpiece */
+  .voice-controls{flex-shrink:0;border-top:1px solid var(--border);background:rgba(10,10,15,0.9);backdrop-filter:blur(16px);padding:20px 24px}
+
+  /* WAVEFORM VISUALIZER */
+  .waveform-wrap{display:flex;align-items:center;justify-content:center;height:52px;gap:3px;margin-bottom:16px;overflow:hidden}
+  .wave-bar{width:3px;border-radius:3px;background:var(--text3);transition:background 0.3s;animation:none}
+  .wave-bar.active{background:var(--accent)}
+  .wave-bar.speaking-bar{background:var(--green)}
+  @keyframes waveAnim{0%,100%{transform:scaleY(0.15)}50%{transform:scaleY(1)}}
+
+  .voice-row{display:flex;align-items:center;gap:16px}
+
+  /* BIG MIC BUTTON */
+  .mic-btn-wrap{position:relative;flex-shrink:0}
+  .mic-ring{position:absolute;inset:-8px;border-radius:50%;border:2px solid var(--accent);opacity:0;pointer-events:none;transition:opacity 0.3s}
+  .mic-ring.active{opacity:0.4;animation:ringPulse 1.5s ease-in-out infinite}
+  @keyframes ringPulse{0%,100%{transform:scale(1);opacity:0.4}50%{transform:scale(1.15);opacity:0.1}}
+  .mic-btn{width:64px;height:64px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:26px;transition:all 0.25s;position:relative;z-index:1;flex-shrink:0}
+  .mic-btn.idle{background:var(--card2);border:2px solid var(--border2);color:var(--text2)}
+  .mic-btn.idle:hover{background:var(--card);border-color:var(--accent);transform:scale(1.05)}
+  .mic-btn.listening{background:linear-gradient(135deg,var(--red),#c0392b);box-shadow:0 0 30px rgba(232,85,85,0.5);border:2px solid rgba(232,85,85,0.4);color:#fff;animation:micPulse 1s ease-in-out infinite}
+  @keyframes micPulse{0%,100%{box-shadow:0 0 20px rgba(232,85,85,0.4)}50%{box-shadow:0 0 45px rgba(232,85,85,0.7)}}
+  .mic-btn.processing{background:linear-gradient(135deg,var(--amber),#d68c2a);border:2px solid rgba(240,166,84,0.4);color:#fff;cursor:not-allowed}
+  .mic-btn.speaking-ai{background:linear-gradient(135deg,var(--accent),var(--pink));border:2px solid rgba(124,110,247,0.4);box-shadow:0 0 30px rgba(124,110,247,0.4);color:#fff;cursor:not-allowed}
+  .mic-btn:disabled{cursor:not-allowed}
+
+  .voice-info{flex:1;min-width:0}
+  .voice-state-label{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:3px;transition:all 0.3s}
+  .voice-hint{font-size:12px;color:var(--text3);line-height:1.4}
+  .interim-text{font-size:12px;color:var(--text2);font-style:italic;margin-top:4px;min-height:16px;transition:all 0.2s}
+
+  .voice-actions{display:flex;gap:8px;align-items:center}
+  .voice-action-btn{padding:7px 13px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.2s;border:1px solid var(--border2);background:transparent;color:var(--text2)}
+  .voice-action-btn:hover{background:var(--card);color:var(--text)}
+  .voice-action-btn.stop-speaking{border-color:rgba(232,85,85,0.3);color:var(--red)}
+  .voice-action-btn.stop-speaking:hover{background:var(--red-soft)}
+
+  /* VOICE SELECTOR */
+  .voice-selector{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+  .voice-select-label{font-size:11px;color:var(--text3);white-space:nowrap}
+  .voice-select{background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:5px 8px;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--text2);outline:none;cursor:pointer;flex:1;max-width:200px}
+  .voice-select:focus{border-color:var(--accent)}
+  .voice-speed{display:flex;align-items:center;gap:6px;margin-left:auto}
+  .speed-label{font-size:11px;color:var(--text3)}
+  .speed-range{width:80px;accent-color:var(--accent)}
+
+  /* EMPTY STATE */
+  .empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;gap:9px}
+  .empty-emoji{font-size:46px;margin-bottom:5px}
+  .empty-title{font-family:'Syne',sans-serif;font-size:19px;font-weight:700}
+  .empty-desc{font-size:13.5px;color:var(--text2);line-height:1.65;max-width:360px}
+
+  /* TYPING INDICATOR */
   .typing-indicator{display:flex;align-items:center;gap:4px;padding:11px 14px;background:var(--card);border:1px solid var(--border);border-radius:16px;border-top-left-radius:4px;width:fit-content}
   .typing-dot{width:7px;height:7px;background:var(--text3);border-radius:50%;animation:typing 1.4s infinite}
   .typing-dot:nth-child(2){animation-delay:0.2s}
   .typing-dot:nth-child(3){animation-delay:0.4s}
   @keyframes typing{0%,80%,100%{transform:translateY(0);opacity:0.4}40%{transform:translateY(-6px);opacity:1}}
-  /* INPUT */
-  .input-area{padding:14px 20px;border-top:1px solid var(--border);background:rgba(10,10,15,0.85);backdrop-filter:blur(12px);flex-shrink:0}
-  .input-row{display:flex;gap:10px;align-items:flex-end}
-  .input-wrap{flex:1;background:var(--card);border:1px solid var(--border2);border-radius:14px;transition:border-color 0.2s}
-  .input-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,110,247,0.1)}
-  .msg-input{width:100%;background:transparent;border:none;outline:none;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text);resize:none;max-height:110px;line-height:1.5}
-  .msg-input::placeholder{color:var(--text3)}
-  .input-hint{font-size:11px;color:var(--text3);padding:3px 14px 9px}
-  .send-btn{width:43px;height:43px;background:var(--accent);border:none;border-radius:12px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px rgba(124,110,247,0.3);flex-shrink:0}
-  .send-btn:hover{background:var(--accent2);transform:translateY(-1px)}
-  .send-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-  .send-btn svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.5}
-  /* EMPTY */
-  .empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;gap:9px}
-  .empty-emoji{font-size:46px;margin-bottom:5px}
-  .empty-title{font-family:'Syne',sans-serif;font-size:19px;font-weight:700}
-  .empty-desc{font-size:13.5px;color:var(--text2);line-height:1.65;max-width:360px}
-  /* TOAST */
-  .toast{position:fixed;bottom:20px;right:20px;background:var(--card2);border:1px solid var(--border2);border-radius:var(--r);padding:12px 16px;font-size:13px;color:var(--text);z-index:1000;transform:translateX(120%);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);max-width:280px;box-shadow:0 4px 22px rgba(0,0,0,0.4)}
-  .toast.show{transform:translateX(0)}
-  .toast-title{font-weight:600;margin-bottom:2px}
-  .toast-body{color:var(--text2);font-size:11.5px}
+
   /* MODAL */
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s}
   .modal-overlay.show{opacity:1;pointer-events:all}
@@ -216,9 +251,20 @@
   .modal-actions{display:flex;gap:9px;margin-top:5px}
   .modal-close{position:absolute;top:13px;right:13px;background:var(--card);border:1px solid var(--border);border-radius:7px;width:27px;height:27px;cursor:pointer;color:var(--text2);font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
   .modal-close:hover{background:var(--card2);color:var(--text)}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:20px;right:20px;background:var(--card2);border:1px solid var(--border2);border-radius:var(--r);padding:12px 16px;font-size:13px;color:var(--text);z-index:1000;transform:translateX(120%);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);max-width:280px;box-shadow:0 4px 22px rgba(0,0,0,0.4)}
+  .toast.show{transform:translateX(0)}
+  .toast-title{font-weight:600;margin-bottom:2px}
+  .toast-body{color:var(--text2);font-size:11.5px}
+
+  /* BROWSER WARNING */
+  .browser-warn{background:linear-gradient(135deg,rgba(232,85,85,0.09),rgba(240,166,84,0.05));border:1px solid rgba(232,85,85,0.25);border-radius:var(--r2);padding:14px 18px;margin:12px 20px 0;font-size:12.5px;color:var(--amber);display:none;align-items:center;gap:10px}
+  .browser-warn.show{display:flex}
+
   ::-webkit-scrollbar{width:4px;height:4px}
   ::-webkit-scrollbar-track{background:transparent}
-  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:4px}
+  ::-webkit:scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:4px}
   ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.15)}
 </style>
 </head>
@@ -231,31 +277,15 @@
     <button class="modal-close" onclick="closeModal('setupModal')">✕</button>
     <div class="modal-icon">⚡</div>
     <div class="modal-title">Set Up PrepAI</div>
-    <div class="modal-desc">Enter your details to get started. You can add multiple Groq API keys — we auto-rotate them when one hits its rate limit so the chat never stops.</div>
+    <div class="modal-desc">Enter your details and Groq API key to get started. Voice conversation is powered by your browser — no extra APIs needed!</div>
     <div class="modal-label">Your Name</div>
     <input class="modal-input" type="text" id="setupName" placeholder="e.g. Alex" />
     <div class="modal-label">Your Domain / Field</div>
     <input class="modal-input" type="text" id="setupDomain" placeholder="e.g. Software Engineering, Finance, Marketing..." />
-    <div class="modal-label">First Groq API Key &nbsp;<span style="color:var(--text3);font-size:11px">— free keys at console.groq.com</span></div>
+    <div class="modal-label">Groq API Key &nbsp;<span style="color:var(--text3);font-size:11px">— free at console.groq.com</span></div>
     <input class="modal-input" type="password" id="setupKey" placeholder="gsk_..." autocomplete="off" />
     <div class="modal-actions">
       <button class="btn btn-primary" onclick="saveSetup()" style="flex:1;padding:11px">Save & Start →</button>
-    </div>
-  </div>
-</div>
-
-<!-- ADD KEY MODAL (shown when ALL keys exhausted) -->
-<div class="modal-overlay" id="addKeyModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('addKeyModal')">✕</button>
-    <div class="modal-icon">🔑</div>
-    <div class="modal-title">All Keys Rate Limited</div>
-    <div class="modal-desc">Every Groq key in your pool has hit its rate limit. Add a fresh key below — your chat history is fully preserved and your message will be sent immediately.</div>
-    <div class="modal-label">New Groq API Key</div>
-    <input class="modal-input" type="password" id="addKeyModalInput" placeholder="gsk_..." autocomplete="off" onkeydown="if(event.key==='Enter')addKeyFromModal()" />
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('addKeyModal')" style="flex:1">Cancel</button>
-      <button class="btn btn-primary" onclick="addKeyFromModal()" style="flex:2;padding:11px">Add & Resume Chat →</button>
     </div>
   </div>
 </div>
@@ -270,15 +300,15 @@
         <div class="logo-icon">🎯</div>
         <div><div class="logo-text">PrepAI</div></div>
       </div>
-      <div class="logo-sub">Interview & Language Coach</div>
+      <div class="logo-sub">Voice English Coach</div>
     </div>
     <nav class="nav">
       <div class="nav-section-label">Workspace</div>
       <div class="nav-item active" id="nav-dashboard" onclick="showPage('dashboard',this)"><span class="nav-icon">⊞</span> Dashboard</div>
-      <div class="nav-item" id="nav-english" onclick="showPage('english',this)"><span class="nav-icon">💬</span> English Practice <span class="nav-badge" style="background:var(--green)">AI</span></div>
+      <div class="nav-item" id="nav-english" onclick="showPage('english',this)"><span class="nav-icon">🎙️</span> Voice Practice <span class="nav-badge" style="background:var(--green)">LIVE</span></div>
       <div class="nav-section-label" style="margin-top:12px">Coming Soon</div>
       <div class="nav-item" onclick="toast2('Coming Soon','Resume interview feature launching soon!','amber')"><span class="nav-icon">📄</span> Resume Interview <span class="nav-badge" style="background:var(--amber)">Soon</span></div>
-      <div class="nav-item" onclick="toast2('Coming Soon','Mock interview simulation coming soon!','amber')"><span class="nav-icon">🎙️</span> Mock Interviews <span class="nav-badge" style="background:var(--amber)">Soon</span></div>
+      <div class="nav-item" onclick="toast2('Coming Soon','Mock interview simulation coming soon!','amber')"><span class="nav-icon">🎬</span> Mock Interviews <span class="nav-badge" style="background:var(--amber)">Soon</span></div>
       <div class="nav-item" onclick="toast2('Coming Soon','Progress tracking coming soon!','amber')"><span class="nav-icon">📈</span> Progress <span class="nav-badge" style="background:var(--amber)">Soon</span></div>
       <div class="nav-item" onclick="toast2('Coming Soon','DSA coding prep coming soon!','amber')"><span class="nav-icon">⌨️</span> DSA Prep <span class="nav-badge" style="background:var(--amber)">Soon</span></div>
     </nav>
@@ -313,16 +343,16 @@
     <div class="page active" id="page-dashboard">
       <div class="topbar">
         <div class="topbar-title">Dashboard</div>
-        <div class="status-pill sp-online"><div class="status-dot dot-green"></div> Groq Ready</div>
+        <div class="status-pill sp-online"><div class="status-dot dot-green"></div> Ready</div>
         <button class="btn btn-ghost" onclick="openModal('setupModal')">⚙ Settings</button>
       </div>
       <div class="dash-content">
         <div class="hero-card">
-          <div class="hero-tag">⚡ Powered by Groq — Ultra-Fast AI</div>
-          <div class="hero-title">Land Your Dream Job<br>with <span>PrepAI</span></div>
-          <div class="hero-desc">Practice English like a native, ace mock interviews, and build the confidence to walk into any interview room and own it. Groq's blazing inference keeps conversations smooth.</div>
+          <div class="hero-tag">🎙️ Live Voice Conversations — Powered by Groq</div>
+          <div class="hero-title">Speak Your Way to<br><span>Fluency</span></div>
+          <div class="hero-desc">Have real spoken conversations with Alex, your AI English coach. Speak naturally, get instant corrections read back to you, and build the confidence to communicate in any professional setting.</div>
           <div class="hero-actions">
-            <button class="btn-hero btn-hp" onclick="showPage('english',document.getElementById('nav-english'))">💬 Start English Practice</button>
+            <button class="btn-hero btn-hp" onclick="showPage('english',document.getElementById('nav-english'))">🎙️ Start Voice Practice</button>
             <button class="btn-hero btn-hg" onclick="toast2('Coming Soon','Resume interview feature launching soon!','accent')">📄 Upload Resume</button>
           </div>
         </div>
@@ -334,40 +364,37 @@
         <div class="section-title">Features</div>
         <div class="features-grid">
           <div class="feature-card" onclick="showPage('english',document.getElementById('nav-english'))">
-            <div class="feature-icon fi-p">💬</div>
-            <div class="feature-name">English Practice</div>
-            <div class="feature-desc">Chat with Alex, your AI colleague who gently corrects grammar and phrasing. Groq-powered for instant responses.</div>
+            <div class="feature-icon fi-p">🎙️</div>
+            <div class="feature-name">Live Voice Practice</div>
+            <div class="feature-desc">Speak with Alex — your AI colleague who listens, responds out loud, and gently corrects your English in real-time conversation.</div>
           </div>
-          <div class="feature-card soon"><div class="soon-tag">Soon</div><div class="feature-icon fi-a">📄</div><div class="feature-name">Resume-Based Interview</div><div class="feature-desc">Upload your resume and get a fully personalized mock interview tailored to your background.</div></div>
-          <div class="feature-card soon"><div class="soon-tag">Soon</div><div class="feature-icon fi-g">🎙️</div><div class="feature-name">Mock Interviews</div><div class="feature-desc">Full end-to-end simulation with role-specific questions, scoring, and detailed feedback.</div></div>
-          <div class="feature-card soon"><div class="soon-tag">Soon</div><div class="feature-icon fi-r">⌨️</div><div class="feature-name">DSA & Coding Prep</div><div class="feature-desc">Practice data structures and algorithms with live code review and complexity analysis.</div></div>
-        </div>
-        <div class="section-title">Resume Upload</div>
-        <div class="upload-zone" onclick="toast2('Coming Soon','Resume upload coming in the next update!','accent')">
-          <div style="font-size:30px">📎</div>
-          <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin:8px 0 5px">Upload Your Resume</div>
-          <div style="font-size:13px;color:var(--text2)">Drop your resume here to unlock personalized interview questions</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:7px">PDF, DOCX, TXT — coming soon</div>
+          <div class="feature-card soon"><div class="soon-tag">Soon</div><div class="feature-icon fi-a">📄</div><div class="feature-name">Resume-Based Interview</div><div class="feature-desc">Upload your resume and get a fully personalized voice mock interview tailored to your background.</div></div>
+          <div class="feature-card soon"><div class="soon-tag">Soon</div><div class="feature-icon fi-g">🎬</div><div class="feature-name">Mock Interviews</div><div class="feature-desc">Full voice interview simulation with role-specific questions, scoring, and detailed audio feedback.</div></div>
+          <div class="feature-card soon"><div class="soon-tag">Soon</div><div class="feature-icon fi-r">⌨️</div><div class="feature-name">DSA & Coding Prep</div><div class="feature-desc">Practice data structures and algorithms with voice-driven walkthroughs and code review.</div></div>
         </div>
       </div>
     </div>
 
-    <!-- ENGLISH PRACTICE -->
+    <!-- VOICE PRACTICE PAGE -->
     <div class="page" id="page-english">
       <div class="topbar">
-        <div class="topbar-title">English Practice</div>
-        <div class="status-pill sp-online" id="practiceStatus"><div class="status-dot dot-green" id="practiceDot"></div><span id="practiceStatusText">Alex is online</span></div>
+        <div class="topbar-title">🎙️ Live Voice Practice</div>
+        <div class="status-pill sp-online" id="practiceStatus"><div class="status-dot dot-green" id="practiceDot"></div><span id="practiceStatusText">Alex is ready</span></div>
         <button class="btn btn-ghost" onclick="clearChat()">🗑 Clear</button>
       </div>
-      <div class="practice-layout">
-        <!-- LEFT -->
-        <div class="practice-sidebar">
+      <div class="voice-layout">
+
+        <!-- LEFT SIDEBAR -->
+        <div class="voice-sidebar">
           <div class="agent-card">
-            <div class="agent-av-wrap"><div class="agent-av">🧑‍💼</div><div class="agent-online"></div></div>
+            <div class="agent-av-wrap">
+              <div class="agent-av" id="agentAvatar">🧑‍💼</div>
+              <div class="agent-online"></div>
+            </div>
             <div class="agent-name">Alex Chen</div>
-            <div class="agent-role">Your US-based AI colleague & coach</div>
+            <div class="agent-role">Your AI English voice coach</div>
             <div class="agent-tags">
-              <span class="agent-tag">🇺🇸 Native</span><span class="agent-tag">Friendly</span><span class="agent-tag">Patient</span><span class="agent-tag">Pro</span>
+              <span class="agent-tag">🇺🇸 Native</span><span class="agent-tag">🎙️ Voice</span><span class="agent-tag">Patient</span><span class="agent-tag">Pro</span>
             </div>
           </div>
           <div class="topics-panel">
@@ -380,50 +407,66 @@
           </div>
           <div class="corrections-panel">
             <div class="corrections-title">Corrections Log <span class="correction-count" id="correctionCount">0</span></div>
-            <div id="correctionsList"><div class="no-corrections">No corrections yet — keep chatting!</div></div>
+            <div id="correctionsList"><div class="no-corrections">No corrections yet — start talking!</div></div>
           </div>
         </div>
 
-        <!-- CHAT -->
-        <div class="chat-area">
-          <div class="chat-topbar">
+        <!-- VOICE MAIN -->
+        <div class="voice-main">
+          <div class="voice-topbar">
             <span class="chat-topic-label">Topic: </span>
             <span class="chat-topic-name" id="currentTopicLabel">Casual Chat & Work Life</span>
             <div class="spacer"></div>
-            <span style="font-size:11px;color:var(--text3)">Type naturally — corrections only when it matters 🤝</span>
+            <span style="font-size:11px;color:var(--text3)">🎙️ Speak naturally — Alex listens and responds aloud</span>
           </div>
 
-          <!-- RATE LIMIT BANNER -->
-          <div class="rate-banner hidden" id="rateBanner">
-            <div class="rb-icon">⚡</div>
-            <div class="rb-text">
-              <div class="rb-title">Rate limit hit — add a new Groq key to keep chatting!</div>
-              <div class="rb-desc">All your keys hit the Groq rate limit (resets in ~1 min). Add a new free key below to continue right now, or wait for auto-retry. Your message is safe!</div>
-              <div class="rb-row">
-                <input class="rb-input" type="password" id="rateBannerInput" placeholder="gsk_... paste new Groq key here" autocomplete="off" onkeydown="if(event.key==='Enter')addKeyFromBanner()" />
-                <button class="rb-btn" onclick="addKeyFromBanner()">Add & Retry →</button>
-              </div>
-            </div>
+          <!-- BROWSER COMPAT WARNING -->
+          <div class="browser-warn" id="browserWarn">
+            ⚠️ <span>Voice recognition works best in <strong>Chrome or Edge</strong>. Your browser may not support it fully.</span>
           </div>
 
-          <div class="messages" id="messages">
+          <!-- TRANSCRIPT -->
+          <div class="transcript" id="transcript">
             <div class="empty-state" id="emptyState">
-              <div class="empty-emoji">👋</div>
-              <div class="empty-title">Hey! I'm Alex.</div>
-              <div class="empty-desc">Software engineer based in San Francisco. Let's just chat like friends — about work, life, tech, anything! I'll drop a friendly note if I spot any English to polish. No stress, just growth 🙌</div>
-              <button class="btn btn-primary" style="margin-top:14px" onclick="sendGreeting()">Start Talking →</button>
+              <div class="empty-emoji">🎙️</div>
+              <div class="empty-title">Ready to talk with Alex?</div>
+              <div class="empty-desc">Click the microphone button below, then speak. Alex will listen, reply out loud, and gently correct your English — just like chatting with a real colleague.</div>
+              <button class="btn btn-primary" style="margin-top:14px;display:flex;align-items:center;gap:8px" onclick="startSession()">🎙️ Start Voice Chat →</button>
             </div>
           </div>
 
-          <div class="input-area">
-            <div class="input-row">
-              <div class="input-wrap">
-                <textarea class="msg-input" id="msgInput" rows="1" placeholder="Type your message... (Enter to send, Shift+Enter for new line)" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-                <div class="input-hint">💡 Write naturally — Alex only corrects when it genuinely matters</div>
+          <!-- VOICE CONTROLS -->
+          <div class="voice-controls">
+
+            <!-- WAVEFORM -->
+            <div class="waveform-wrap" id="waveform"></div>
+
+            <!-- MAIN ROW -->
+            <div class="voice-row">
+              <div class="mic-btn-wrap">
+                <div class="mic-ring" id="micRing"></div>
+                <button class="mic-btn idle" id="micBtn" onclick="toggleMic()">🎙️</button>
               </div>
-              <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-                <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-              </button>
+              <div class="voice-info">
+                <div class="voice-state-label" id="voiceStateLabel">Click mic to speak</div>
+                <div class="voice-hint" id="voiceHint">Hold a natural conversation — Alex will reply with voice</div>
+                <div class="interim-text" id="interimText"></div>
+              </div>
+              <div class="voice-actions">
+                <button class="voice-action-btn stop-speaking" id="stopSpeakBtn" onclick="stopSpeaking()" style="display:none">⏹ Stop Alex</button>
+                <button class="voice-action-btn" onclick="clearChat()">🗑 Clear</button>
+              </div>
+            </div>
+
+            <!-- VOICE SETTINGS -->
+            <div class="voice-selector">
+              <span class="voice-select-label">🔊 Alex's voice:</span>
+              <select class="voice-select" id="voiceSelect" onchange="onVoiceChange()"></select>
+              <div class="voice-speed">
+                <span class="speed-label">Speed:</span>
+                <input type="range" class="speed-range" id="speedRange" min="0.7" max="1.3" step="0.05" value="0.95" />
+                <span id="speedVal" style="font-size:11px;color:var(--text3);min-width:28px">0.95×</span>
+              </div>
             </div>
           </div>
         </div>
@@ -436,19 +479,30 @@
 // ══════ CONFIG ══════
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
-const RATE_LIMIT_RESET_MS = 62000; // 62s auto-reset window for Groq free tier
+const RATE_LIMIT_RESET_MS = 62000;
 
 // ══════ STATE ══════
-let keyPool = []; // [{key, status:'ok'|'rate_limited'|'invalid', resetAt:null|timestamp, label}]
-let userName = '';
-let userDomain = '';
+let keyPool = [];
+let userName = '', userDomain = '';
 let currentTopic = 'casual';
 let conversationHistory = [];
 let corrections = [];
 let sessionCount = 0;
-let isTyping = false;
 let sessionStarted = false;
-let pendingMessage = null; // queued msg when all keys are exhausted
+
+// Voice state machine: idle | listening | processing | speaking
+let voiceState = 'idle';
+let recognition = null;
+let synth = window.speechSynthesis;
+let currentUtterance = null;
+let availableVoices = [];
+let selectedVoice = null;
+let speechRate = 0.95;
+
+// Waveform
+let waveAnimFrame = null;
+let waveBars = [];
+let audioCtx = null, analyser = null, micStream = null, sourceNode = null;
 
 const topicLabels = {casual:'Casual Chat & Work Life',career:'Career & Goals',technology:'Technology & Industry',interview:'Interview Stories',culture:'Work Culture & Teams'};
 
@@ -457,132 +511,385 @@ window.addEventListener('load', () => {
   userName = localStorage.getItem('prepai_name') || '';
   userDomain = localStorage.getItem('prepai_domain') || '';
   sessionCount = parseInt(localStorage.getItem('prepai_sessions') || '0');
-  // Load keys
   try { keyPool = JSON.parse(localStorage.getItem('prepai_keys') || '[]'); } catch(e) { keyPool = []; }
-  // Migrate old single key
+  // migrate old key
   const oldKey = localStorage.getItem('prepai_key');
-  if (oldKey && !keyPool.find(k => k.key === oldKey)) {
-    keyPool.unshift({key:oldKey, status:'ok', resetAt:null, label:maskKey(oldKey)});
+  if (oldKey && !keyPool.find(k=>k.key===oldKey)) {
+    keyPool.unshift({key:oldKey,status:'ok',resetAt:null,label:maskKey(oldKey)});
     localStorage.removeItem('prepai_key');
     saveKeys();
   }
+  buildWaveform();
+  initSpeechRecognition();
+  initVoices();
   renderKeyList(); updateSidebar(); updateStats();
+  document.getElementById('speedRange').addEventListener('input', e => {
+    speechRate = parseFloat(e.target.value);
+    document.getElementById('speedVal').textContent = speechRate.toFixed(2)+'×';
+  });
+  // check browser support
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    document.getElementById('browserWarn').classList.add('show');
+  }
   if (!userName || keyPool.length === 0) setTimeout(() => openModal('setupModal'), 500);
 });
+
+// ══════ WAVEFORM ══════
+function buildWaveform() {
+  const wrap = document.getElementById('waveform');
+  wrap.innerHTML = '';
+  waveBars = [];
+  for (let i = 0; i < 40; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'wave-bar';
+    bar.style.height = '6px';
+    bar.style.transformOrigin = 'center bottom';
+    wrap.appendChild(bar);
+    waveBars.push(bar);
+  }
+}
+
+function animateWave(mode) {
+  // mode: 'listening' | 'speaking' | 'idle'
+  if (waveAnimFrame) cancelAnimationFrame(waveAnimFrame);
+  waveBars.forEach(b => { b.className='wave-bar'; b.style.animation='none'; b.style.height='6px'; b.style.transform='scaleY(1)'; });
+  if (mode === 'idle') return;
+
+  if (mode === 'listening' && analyser) {
+    const dataArr = new Uint8Array(analyser.frequencyBinCount);
+    function draw() {
+      waveAnimFrame = requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(dataArr);
+      waveBars.forEach((bar, i) => {
+        const idx = Math.floor(i * analyser.frequencyBinCount / waveBars.length);
+        const val = dataArr[idx] / 255;
+        const h = Math.max(6, val * 48);
+        bar.style.height = h+'px';
+        bar.className = 'wave-bar active';
+      });
+    }
+    draw();
+  } else {
+    // fake animated wave for speaking/processing
+    const cls = mode === 'speaking' ? 'wave-bar speaking-bar' : 'wave-bar active';
+    waveBars.forEach((bar, i) => {
+      bar.className = cls;
+      const delay = (i / waveBars.length) * 1.2;
+      const dur = 0.4 + Math.random() * 0.5;
+      const maxH = mode === 'speaking' ? 32 + Math.random() * 16 : 12 + Math.random() * 10;
+      bar.style.height = '6px';
+      bar.style.animation = `waveAnim ${dur.toFixed(2)}s ${delay.toFixed(2)}s ease-in-out infinite`;
+      bar.style.setProperty('--max-h', maxH+'px');
+    });
+    // inject keyframe if needed
+    if (!document.getElementById('waveKF')) {
+      const s = document.createElement('style');
+      s.id = 'waveKF';
+      s.textContent = `@keyframes waveAnim{0%,100%{height:6px}50%{height:var(--max-h,28px)}}`;
+      document.head.appendChild(s);
+    }
+  }
+}
+
+async function startMicAnalyser() {
+  try {
+    micStream = await navigator.mediaDevices.getUserMedia({audio:true});
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 128;
+    sourceNode = audioCtx.createMediaStreamSource(micStream);
+    sourceNode.connect(analyser);
+  } catch(e) { /* mic permission denied — wave will show placeholder */ }
+}
+
+function stopMicAnalyser() {
+  if (waveAnimFrame) { cancelAnimationFrame(waveAnimFrame); waveAnimFrame = null; }
+  if (sourceNode) { sourceNode.disconnect(); sourceNode = null; }
+  if (audioCtx) { audioCtx.close(); audioCtx = null; analyser = null; }
+  if (micStream) { micStream.getTracks().forEach(t=>t.stop()); micStream = null; }
+}
+
+// ══════ SPEECH SYNTHESIS ══════
+function initVoices() {
+  function populate() {
+    availableVoices = synth.getVoices().filter(v => v.lang.startsWith('en'));
+    const sel = document.getElementById('voiceSelect');
+    sel.innerHTML = '';
+    // Prefer US English, female first
+    const priority = ['Samantha','Karen','Victoria','Moira','Google US English','Microsoft Aria','en-US'];
+    availableVoices.sort((a,b)=>{
+      const aP = priority.findIndex(p=>a.name.includes(p)||a.lang===p);
+      const bP = priority.findIndex(p=>b.name.includes(p)||b.lang===p);
+      return (aP===-1?999:aP)-(bP===-1?999:bP);
+    });
+    availableVoices.forEach((v,i)=>{
+      const o = document.createElement('option');
+      o.value = i;
+      o.textContent = v.name+' ('+v.lang+')';
+      sel.appendChild(o);
+    });
+    if (availableVoices.length) selectedVoice = availableVoices[0];
+  }
+  populate();
+  if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = populate;
+}
+
+function onVoiceChange() {
+  const i = parseInt(document.getElementById('voiceSelect').value);
+  selectedVoice = availableVoices[i] || null;
+}
+
+function speak(text, onEnd) {
+  if (!synth) { onEnd && onEnd(); return; }
+  synth.cancel();
+  // strip correction block before speaking
+  const cleanText = text.replace(/\[CORRECTION\][\s\S]*?\[\/CORRECTION\]/g,'').trim();
+  currentUtterance = new SpeechSynthesisUtterance(cleanText);
+  if (selectedVoice) currentUtterance.voice = selectedVoice;
+  currentUtterance.rate = speechRate;
+  currentUtterance.pitch = 1.0;
+  currentUtterance.onend = () => { currentUtterance = null; onEnd && onEnd(); };
+  currentUtterance.onerror = () => { currentUtterance = null; onEnd && onEnd(); };
+  synth.speak(currentUtterance);
+}
+
+function stopSpeaking() {
+  synth.cancel();
+  currentUtterance = null;
+  setVoiceState('idle');
+}
+
+// ══════ SPEECH RECOGNITION ══════
+function initSpeechRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return;
+  recognition = new SR();
+  recognition.lang = 'en-US';
+  recognition.interimResults = true;
+  recognition.continuous = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = () => {
+    animateWave('listening');
+  };
+  recognition.onresult = (e) => {
+    let interim = '', final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) final += t;
+      else interim += t;
+    }
+    document.getElementById('interimText').textContent = interim || final || '';
+    if (final) handleUserSpeech(final.trim());
+  };
+  recognition.onerror = (e) => {
+    if (e.error === 'no-speech') { setVoiceState('idle'); return; }
+    if (e.error === 'not-allowed') { toast2('Mic blocked','Please allow microphone access in your browser','red'); setVoiceState('idle'); return; }
+    setVoiceState('idle');
+  };
+  recognition.onend = () => {
+    stopMicAnalyser();
+    if (voiceState === 'listening') setVoiceState('idle'); // no speech detected
+  };
+}
+
+// ══════ MIC TOGGLE ══════
+async function toggleMic() {
+  if (voiceState === 'speaking') { stopSpeaking(); return; }
+  if (voiceState === 'processing') return;
+  if (voiceState === 'listening') {
+    // Stop listening
+    if (recognition) recognition.stop();
+    stopMicAnalyser();
+    setVoiceState('idle');
+    return;
+  }
+  // Start listening
+  if (keyPool.length === 0) { openModal('setupModal'); return; }
+  if (!getActiveKey()) { toast2('No active key','All Groq keys are rate limited. Wait ~1min or add a new key.','amber'); return; }
+  if (!recognition) { toast2('Not supported','Voice recognition requires Chrome or Edge','red'); return; }
+  if (!sessionStarted) {
+    sessionStarted = true; sessionCount++;
+    localStorage.setItem('prepai_sessions', sessionCount); updateStats();
+    const es = document.getElementById('emptyState'); if(es) es.remove();
+    // Alex greets first
+    await alexGreet();
+    return;
+  }
+  startListening();
+}
+
+async function startSession() {
+  const es = document.getElementById('emptyState'); if(es) es.remove();
+  if (keyPool.length === 0) { openModal('setupModal'); return; }
+  if (!getActiveKey()) { toast2('No active key','Add a Groq key first','amber'); return; }
+  sessionStarted = true; sessionCount++;
+  localStorage.setItem('prepai_sessions', sessionCount); updateStats();
+  await alexGreet();
+}
+
+async function alexGreet() {
+  setVoiceState('processing');
+  const greet = `Hey! I'm ${userName||'a new user'}, I work in ${userDomain||'tech'}. Just starting our session!`;
+  conversationHistory.push({role:'user', content:greet});
+  addTranscriptMsg('user', greet);
+  addTypingIndicator();
+  try {
+    const reply = await callGroqWithRotation(conversationHistory, getSysPrompt());
+    removeTypingIndicator();
+    if (reply) {
+      const {text, correction} = parseResponse(reply);
+      conversationHistory.push({role:'assistant', content:reply});
+      addTranscriptMsg('agent', text, correction);
+      setVoiceState('speaking');
+      speak(text, () => setVoiceState('idle'));
+    } else {
+      setVoiceState('idle');
+      toast2('Rate limited','All Groq keys are limited right now. Try again in ~1min.','amber');
+    }
+  } catch(e) {
+    removeTypingIndicator(); setVoiceState('idle');
+    toast2('Error', e.message, 'red');
+  }
+}
+
+function startListening() {
+  setVoiceState('listening');
+  startMicAnalyser().then(() => animateWave('listening'));
+  try { recognition.start(); } catch(e) {}
+}
+
+async function handleUserSpeech(text) {
+  if (!text) { setVoiceState('idle'); return; }
+  document.getElementById('interimText').textContent = '';
+  setVoiceState('processing');
+  addTranscriptMsg('user', text);
+  conversationHistory.push({role:'user', content:text});
+  addTypingIndicator();
+  try {
+    const reply = await callGroqWithRotation(conversationHistory, getSysPrompt());
+    removeTypingIndicator();
+    if (reply) {
+      const {text:chatText, correction} = parseResponse(reply);
+      conversationHistory.push({role:'assistant', content:reply});
+      addTranscriptMsg('agent', chatText, correction);
+      setVoiceState('speaking');
+      speak(chatText, () => setVoiceState('idle'));
+    } else {
+      setVoiceState('idle');
+      toast2('Rate limited','All Groq keys are limited. Add a new key or wait ~1min.','amber');
+      addSysMsg('⏳ Rate limit hit — add a Groq key in the sidebar or wait ~1 minute');
+    }
+  } catch(e) {
+    removeTypingIndicator(); setVoiceState('idle');
+    toast2('Error', e.message, 'red');
+  }
+}
+
+// ══════ VOICE STATE MACHINE ══════
+function setVoiceState(state) {
+  voiceState = state;
+  const btn = document.getElementById('micBtn');
+  const ring = document.getElementById('micRing');
+  const label = document.getElementById('voiceStateLabel');
+  const hint = document.getElementById('voiceHint');
+  const stopBtn = document.getElementById('stopSpeakBtn');
+  const avatar = document.getElementById('agentAvatar');
+  const statusPill = document.getElementById('practiceStatus');
+  const dot = document.getElementById('practiceDot');
+  const statusText = document.getElementById('practiceStatusText');
+
+  btn.className = 'mic-btn ' + state;
+  ring.className = 'mic-ring' + (state==='listening' ? ' active' : '');
+
+  switch(state) {
+    case 'idle':
+      btn.textContent = '🎙️'; btn.disabled = false;
+      label.textContent = 'Click mic to speak'; hint.textContent = 'Hold a natural conversation — Alex will reply with voice';
+      stopBtn.style.display = 'none'; avatar.className = 'agent-av';
+      statusPill.className = 'status-pill sp-online'; dot.className = 'status-dot dot-green'; statusText.textContent = 'Alex is ready';
+      animateWave('idle'); break;
+    case 'listening':
+      btn.textContent = '🔴'; btn.disabled = false;
+      label.textContent = 'Listening...'; hint.textContent = 'Speak clearly — click mic again to stop early';
+      stopBtn.style.display = 'none'; avatar.className = 'agent-av';
+      statusPill.className = 'status-pill sp-listening'; dot.className = 'status-dot dot-red'; statusText.textContent = 'Listening...';
+      break;
+    case 'processing':
+      btn.textContent = '⏳'; btn.disabled = true;
+      label.textContent = 'Alex is thinking...'; hint.textContent = 'Groq AI is generating the response';
+      stopBtn.style.display = 'none'; avatar.className = 'agent-av';
+      statusPill.className = 'status-pill sp-warn'; dot.className = 'status-dot dot-amber'; statusText.textContent = 'Processing...';
+      animateWave('processing'); break;
+    case 'speaking':
+      btn.textContent = '🔊'; btn.disabled = true;
+      label.textContent = 'Alex is speaking...'; hint.textContent = 'Click "Stop Alex" to interrupt and speak yourself';
+      stopBtn.style.display = 'block'; avatar.className = 'agent-av speaking';
+      statusPill.className = 'status-pill sp-speaking'; dot.className = 'status-dot dot-purple'; statusText.textContent = 'Alex is speaking';
+      animateWave('speaking'); break;
+  }
+}
 
 // ══════ KEY MANAGEMENT ══════
 function maskKey(k) { if (!k || k.length < 10) return k; return k.slice(0,7)+'···'+k.slice(-4); }
 function saveKeys() { localStorage.setItem('prepai_keys', JSON.stringify(keyPool)); }
-
 function addKey(rawKey) {
-  rawKey = (rawKey || '').trim();
+  rawKey = (rawKey||'').trim();
   if (!rawKey) { toast2('Empty key','Please paste a Groq API key','red'); return false; }
   if (!rawKey.startsWith('gsk_')) { toast2('Invalid key','Groq keys start with gsk_','red'); return false; }
-  if (keyPool.find(k => k.key === rawKey)) { toast2('Already added',maskKey(rawKey)+' is already in your pool','amber'); return false; }
-  keyPool.push({key:rawKey, status:'ok', resetAt:null, label:maskKey(rawKey)});
+  if (keyPool.find(k=>k.key===rawKey)) { toast2('Already added',maskKey(rawKey)+' is already in your pool','amber'); return false; }
+  keyPool.push({key:rawKey,status:'ok',resetAt:null,label:maskKey(rawKey)});
   saveKeys(); renderKeyList(); updateStats();
-  toast2('Key added ✓', maskKey(rawKey)+' is ready to use', 'green');
-  return true;
+  toast2('Key added ✓',maskKey(rawKey)+' is ready','green'); return true;
 }
-
-function removeKey(idx) {
-  keyPool.splice(idx, 1); saveKeys(); renderKeyList(); updateStats();
-}
-
+function removeKey(idx) { keyPool.splice(idx,1); saveKeys(); renderKeyList(); updateStats(); }
 function getActiveKey() {
-  // Auto-reset keys whose rate-limit window has passed
-  const now = Date.now();
-  let changed = false;
-  for (const k of keyPool) {
-    if (k.status === 'rate_limited' && k.resetAt && now >= k.resetAt) {
-      k.status = 'ok'; k.resetAt = null; changed = true;
-    }
-  }
+  const now = Date.now(); let changed = false;
+  for (const k of keyPool) { if (k.status==='rate_limited'&&k.resetAt&&now>=k.resetAt) { k.status='ok';k.resetAt=null;changed=true; } }
   if (changed) { saveKeys(); renderKeyList(); }
-  return keyPool.find(k => k.status === 'ok') || null;
+  return keyPool.find(k=>k.status==='ok')||null;
 }
-
 function markRateLimited(key) {
-  const k = keyPool.find(x => x.key === key);
-  if (!k) return;
-  k.status = 'rate_limited';
-  k.resetAt = Date.now() + RATE_LIMIT_RESET_MS;
+  const k = keyPool.find(x=>x.key===key); if(!k)return;
+  k.status='rate_limited'; k.resetAt=Date.now()+RATE_LIMIT_RESET_MS;
   saveKeys(); renderKeyList();
-  // Auto-retry when this key resets
-  setTimeout(() => {
-    getActiveKey(); // will reset it if window passed
-    renderKeyList(); updateStats();
-    if (pendingMessage !== null) {
-      const active = getActiveKey();
-      if (active) { hideBanner(); retryPending(); }
-    }
-  }, RATE_LIMIT_RESET_MS + 1000);
+  setTimeout(()=>{ getActiveKey(); renderKeyList(); updateStats(); }, RATE_LIMIT_RESET_MS+1000);
 }
-
-function markInvalid(key) {
-  const k = keyPool.find(x => x.key === key);
-  if (k) { k.status = 'invalid'; saveKeys(); renderKeyList(); }
-}
-
+function markInvalid(key) { const k=keyPool.find(x=>x.key===key); if(k){k.status='invalid';saveKeys();renderKeyList();} }
 function renderKeyList() {
   const list = document.getElementById('keyList');
   const badge = document.getElementById('keyBadge');
-  const okCount = keyPool.filter(k => k.status === 'ok').length;
+  const okCount = keyPool.filter(k=>k.status==='ok').length;
   badge.textContent = okCount+'/'+keyPool.length+' active';
-  badge.style.color = okCount > 0 ? 'var(--green)' : (keyPool.length > 0 ? 'var(--amber)' : 'var(--text3)');
-  if (keyPool.length === 0) {
-    list.innerHTML = '<div style="font-size:11px;color:var(--text3);text-align:center;padding:8px 0">No keys — add one below</div>';
-    return;
-  }
-  list.innerHTML = keyPool.map((k,i) => {
-    const statusClass = k.status === 'ok' ? 'ok' : k.status === 'rate_limited' ? 'rate_limited' : 'invalid';
-    const dotClass = k.status === 'ok' ? 'dot-ok' : k.status === 'rate_limited' ? 'dot-warn' : 'dot-err';
-    const statusIcon = k.status === 'ok' ? '✓' : k.status === 'rate_limited' ? '⏳' : '✗';
-    const tooltip = k.status === 'rate_limited' ? 'Rate limited — auto-retries in ~1min' : k.status === 'invalid' ? 'Invalid key' : 'Active';
-    return `<div class="key-item ${statusClass}" title="${tooltip}">
-      <div class="key-dot ${dotClass}"></div>
-      <span class="key-label">${k.label}</span>
-      <span style="font-size:10px;color:var(--text3)">${statusIcon}</span>
-      <button class="key-del" onclick="removeKey(${i})">✕</button>
-    </div>`;
+  badge.style.color = okCount>0?'var(--green)':(keyPool.length>0?'var(--amber)':'var(--text3)');
+  if (!keyPool.length) { list.innerHTML='<div style="font-size:11px;color:var(--text3);text-align:center;padding:8px 0">No keys — add one below</div>'; return; }
+  list.innerHTML = keyPool.map((k,i)=>{
+    const sc=k.status==='ok'?'ok':k.status==='rate_limited'?'rate_limited':'invalid';
+    const dc=k.status==='ok'?'dot-ok':k.status==='rate_limited'?'dot-warn':'dot-err';
+    const si=k.status==='ok'?'✓':k.status==='rate_limited'?'⏳':'✗';
+    return `<div class="key-item ${sc}"><div class="key-dot ${dc}"></div><span class="key-label">${k.label}</span><span style="font-size:10px;color:var(--text3)">${si}</span><button class="key-del" onclick="removeKey(${i})">✕</button></div>`;
   }).join('');
 }
 
-// ══════ GROQ API CALL WITH ROTATION ══════
+// ══════ GROQ API ══════
 async function callGroqWithRotation(messages, sysPrompt) {
-  let maxTries = Math.max(keyPool.length, 1) + 1;
-  for (let i = 0; i < maxTries; i++) {
+  let maxTries = Math.max(keyPool.length,1)+1;
+  for (let i=0;i<maxTries;i++) {
     const keyObj = getActiveKey();
-    if (!keyObj) return null; // all exhausted
+    if (!keyObj) return null;
     try {
       const res = await fetch(GROQ_URL, {
         method:'POST',
         headers:{'Content-Type':'application/json','Authorization':'Bearer '+keyObj.key},
-        body: JSON.stringify({model:GROQ_MODEL, max_tokens:900, messages:[{role:'system',content:sysPrompt},...messages]})
+        body:JSON.stringify({model:GROQ_MODEL,max_tokens:700,messages:[{role:'system',content:sysPrompt},...messages]})
       });
-      if (res.status === 429) {
-        markRateLimited(keyObj.key);
-        const next = getActiveKey();
-        if (!next) return null;
-        continue; // try next key
-      }
-      if (res.status === 401 || res.status === 403) {
-        markInvalid(keyObj.key);
-        continue;
-      }
-      if (!res.ok) {
-        const err = await res.json().catch(()=>({}));
-        throw new Error(err.error?.message || 'API error '+res.status);
-      }
+      if (res.status===429) { markRateLimited(keyObj.key); const next=getActiveKey(); if(!next)return null; continue; }
+      if (res.status===401||res.status===403) { markInvalid(keyObj.key); continue; }
+      if (!res.ok) { const err=await res.json().catch(()=>({})); throw new Error(err.error?.message||'API error '+res.status); }
       const data = await res.json();
-      return data.choices?.[0]?.message?.content || '';
+      return data.choices?.[0]?.message?.content||'';
     } catch(e) {
-      if (e.message && (e.message.includes('rate') || e.message.includes('429'))) {
-        markRateLimited(keyObj.key);
-        const next = getActiveKey();
-        if (!next) return null;
-        continue;
-      }
+      if (e.message&&(e.message.includes('rate')||e.message.includes('429'))) { markRateLimited(keyObj.key); const next=getActiveKey(); if(!next)return null; continue; }
       throw e;
     }
   }
@@ -592,34 +899,33 @@ async function callGroqWithRotation(messages, sysPrompt) {
 // ══════ SYSTEM PROMPT ══════
 function getSysPrompt() {
   const tg = {
-    casual:'Talk about daily work life, weekends, coffee, lunch, commute, team hangouts, hobbies — like real coworkers chatting.',
+    casual:'Talk about daily work life, weekends, coffee, lunch, commute, team hangouts, hobbies.',
     career:'Discuss career goals, job switches, promotions, skill building, professional growth, side projects.',
-    technology:`Discuss tech trends, tools, ${userDomain||'industry'}-related technology, software, AI, gadgets — conversationally.`,
-    interview:'Share interview experiences, tips, common questions, negotiation stories. Give advice naturally.',
+    technology:`Discuss tech trends, tools, ${userDomain||'industry'}-related technology, software, AI, gadgets.`,
+    interview:'Share interview experiences, tips, common questions, negotiation stories.',
     culture:'Talk about team dynamics, remote work, company culture, management styles, work-life balance.'
   };
-  return `You are Alex Chen, a warm friendly American professional based in San Francisco. You work in ${userDomain||'tech'} — same field as the user. Have a genuine, friendly conversation like a close work friend.
+  return `You are Alex Chen, a warm friendly American professional based in San Francisco. You work in ${userDomain||'tech'}. Have a genuine, friendly SPOKEN conversation — like a close work friend chatting out loud.
 
-PERSONALITY:
-- Warm, encouraging, natural — like a real friend texting
-- Use casual American English: contractions, light slang ("totally", "for sure", "honestly", "tbh", "ngl", "by the way")
-- Genuine interest — ask follow-up questions, share your own (fictional) experiences
-- Conversational length — not too brief, not essays
+VOICE CONVERSATION RULES (CRITICAL):
+- Keep responses SHORT and conversational — 2-4 sentences max. This is spoken dialogue, not text.
+- NO bullet points, lists, or markdown. Speak naturally like a human.
+- Use contractions and casual American English: "totally", "for sure", "honestly", "tbh", "ngl"
+- Ask one follow-up question to keep the convo going
+- Genuine interest — share your own fictional experiences
 
-ENGLISH COACHING (CRITICAL):
-- ONLY correct when it genuinely hurts professional credibility: wrong verb tenses, missing articles (a/an/the), wrong prepositions, confusing word choices, broken sentence structure
-- DO NOT correct minor imperfections — if meaning is clear, let it flow. Be a good friend, not a grammar robot
-- When you DO correct, be warm and casual about it, never clinical
-- Place this block AT THE END of your message (after your reply):
-[CORRECTION]{"wrong":"exact phrase user said","right":"the correct version","why":"brief friendly 1-2 sentence explanation like from a friend"}[/CORRECTION]
-- Only ONE correction per message — the most important one
-- If English is fine → NO [CORRECTION] block at all
+ENGLISH COACHING:
+- ONLY correct genuine mistakes that hurt professional credibility: wrong tenses, missing articles (a/an/the), wrong prepositions, broken sentence structure
+- DO NOT correct minor imperfections — if meaning is clear, let it flow
+- When you do correct, be warm and brief. Put this block AT THE END of your reply:
+[CORRECTION]{"wrong":"exact phrase user said","right":"the correct version","why":"brief 1-sentence friendly explanation"}[/CORRECTION]
+- Only ONE correction max, only if genuinely needed. If English is fine → NO block.
 
 TOPIC: ${tg[currentTopic]||tg.casual}
 User: ${userName||'friend'} | Domain: ${userDomain||'your field'}`;
 }
 
-// ══════ CHAT ══════
+// ══════ RESPONSE PARSER ══════
 function parseResponse(fullText) {
   const m = fullText.match(/\[CORRECTION\]([\s\S]*?)\[\/CORRECTION\]/);
   const text = fullText.replace(/\[CORRECTION\][\s\S]*?\[\/CORRECTION\]/g,'').trim();
@@ -628,132 +934,11 @@ function parseResponse(fullText) {
   return {text, correction};
 }
 
-async function doSend(text, isRetry=false) {
-  isTyping = true;
-  document.getElementById('sendBtn').disabled = true;
-  if (!sessionStarted) { sessionStarted=true; sessionCount++; localStorage.setItem('prepai_sessions',sessionCount); updateStats(); }
-  if (!isRetry) addMessage('user', text);
-  const historyMsg = {role:'user', content:text};
-  conversationHistory.push(historyMsg);
-  addTypingIndicator();
-
-  try {
-    const fullText = await callGroqWithRotation(conversationHistory, getSysPrompt());
-    removeTypingIndicator();
-    if (fullText === null) {
-      // All keys exhausted — queue message
-      conversationHistory.pop(); // remove so we can retry
-      pendingMessage = text;
-      showBanner();
-      addSysMsg('⏳ All Groq keys are rate limited right now. Add a new key above to continue — your message is saved!');
-    } else {
-      pendingMessage = null;
-      const {text:chatText, correction} = parseResponse(fullText);
-      conversationHistory.push({role:'assistant', content:fullText});
-      addMessage('agent', chatText, correction);
-      hideBanner();
-    }
-  } catch(e) {
-    removeTypingIndicator();
-    conversationHistory.pop();
-    toast2('Error', e.message||'Something went wrong', 'red');
-  } finally {
-    isTyping = false;
-    document.getElementById('sendBtn').disabled = false;
-    document.getElementById('msgInput').focus();
-  }
-}
-
-async function sendMessage() {
-  const input = document.getElementById('msgInput');
-  const text = input.value.trim();
-  if (!text || isTyping) return;
-  if (keyPool.length === 0) { openModal('setupModal'); return; }
-  if (!getActiveKey()) {
-    // No active key right now — save as pending and show banner
-    pendingMessage = text;
-    input.value = ''; autoResize(input);
-    showBanner();
-    toast2('All keys limited','Add a new Groq key to send your message','amber');
-    return;
-  }
-  input.value = ''; autoResize(input);
-  await doSend(text);
-}
-
-async function sendGreeting() {
-  const es = document.getElementById('emptyState');
-  if (es) es.remove();
-  if (!getActiveKey()) { openModal('setupModal'); return; }
-  const greet = `Hey Alex! I'm ${userName||'a new user'}. I work in ${userDomain||'tech'}. Nice to meet you!`;
-  await doSend(greet);
-}
-
-async function retryPending() {
-  if (pendingMessage === null) return;
-  const msg = pendingMessage;
-  pendingMessage = null;
-  addSysMsg('✅ New key active! Sending your message now...');
-  await doSend(msg, true);
-}
-
-// ══════ BANNER ══════
-function showBanner() {
-  document.getElementById('rateBanner').classList.remove('hidden');
-  const p = document.getElementById('practiceStatus');
-  const d = document.getElementById('practiceDot');
-  const t = document.getElementById('practiceStatusText');
-  p.className = 'status-pill sp-warn';
-  d.className = 'status-dot dot-amber';
-  t.textContent = 'Rate limited — add key';
-}
-function hideBanner() {
-  document.getElementById('rateBanner').classList.add('hidden');
-  const p = document.getElementById('practiceStatus');
-  const d = document.getElementById('practiceDot');
-  const t = document.getElementById('practiceStatusText');
-  p.className = 'status-pill sp-online';
-  d.className = 'status-dot dot-green';
-  t.textContent = 'Alex is online';
-}
-
-// ══════ KEY INPUT HANDLERS ══════
-function addKeySidebar() {
-  const inp = document.getElementById('sidebarKeyInput');
-  if (addKey(inp.value)) { inp.value = ''; if (pendingMessage!==null) retryPending(); }
-}
-function addKeyFromModal() {
-  const inp = document.getElementById('addKeyModalInput');
-  if (addKey(inp.value)) { inp.value = ''; closeModal('addKeyModal'); if (pendingMessage!==null) retryPending(); }
-}
-function addKeyFromBanner() {
-  const inp = document.getElementById('rateBannerInput');
-  if (addKey(inp.value)) { inp.value = ''; hideBanner(); if (pendingMessage!==null) retryPending(); }
-}
-
-// ══════ MODAL / SETUP ══════
-function openModal(id) { document.getElementById(id).classList.add('show'); }
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-
-function saveSetup() {
-  const name = document.getElementById('setupName').value.trim();
-  const domain = document.getElementById('setupDomain').value.trim();
-  const key = document.getElementById('setupKey').value.trim();
-  if (!name) { toast2('Name required','Please enter your name','red'); return; }
-  if (keyPool.length === 0 && !key) { toast2('Key required','Please enter a Groq API key','red'); return; }
-  userName = name; userDomain = domain||'tech';
-  localStorage.setItem('prepai_name',userName); localStorage.setItem('prepai_domain',userDomain);
-  if (key) addKey(key);
-  updateSidebar(); updateStats(); closeModal('setupModal');
-  toast2('Welcome, '+userName+'! 🎉','Alex is ready to chat','green');
-}
-
-// ══════ DOM HELPERS ══════
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
-
-function addMessage(role, text, correction=null) {
-  const msgs = document.getElementById('messages');
-  const es = document.getElementById('emptyState'); if (es) es.remove();
+// ══════ TRANSCRIPT DOM ══════
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}
+function addTranscriptMsg(role, text, correction=null) {
+  const msgs = document.getElementById('transcript');
+  const es = document.getElementById('emptyState'); if(es)es.remove();
   const now = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
   const isUser = role==='user';
   let corrHTML = '';
@@ -767,75 +952,82 @@ function addMessage(role, text, correction=null) {
   msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
   updateStats();
 }
-
 function addSysMsg(text) {
-  const msgs = document.getElementById('messages');
-  const div = document.createElement('div'); div.className = 'sys-msg'; div.textContent = text;
-  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+  const msgs = document.getElementById('transcript');
+  const div = document.createElement('div'); div.className='sys-msg'; div.textContent=text;
+  msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
 }
-
 function addTypingIndicator() {
-  const msgs = document.getElementById('messages');
-  const es = document.getElementById('emptyState'); if (es) es.remove();
-  const div = document.createElement('div'); div.className = 'msg agent'; div.id = 'typingIndicator';
-  div.innerHTML = `<div class="msg-av agent">🧑‍💼</div><div class="msg-content"><div class="msg-name">Alex Chen</div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
-  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+  const msgs = document.getElementById('transcript');
+  const es = document.getElementById('emptyState'); if(es)es.remove();
+  const div = document.createElement('div'); div.className='msg agent'; div.id='typingIndicator';
+  div.innerHTML=`<div class="msg-av agent">🧑‍💼</div><div class="msg-content"><div class="msg-name">Alex Chen</div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+  msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
 }
-function removeTypingIndicator() { const t = document.getElementById('typingIndicator'); if(t)t.remove(); }
-
+function removeTypingIndicator(){const t=document.getElementById('typingIndicator');if(t)t.remove();}
 function updateCorrectionsList() {
   document.getElementById('correctionCount').textContent = corrections.length;
   const list = document.getElementById('correctionsList');
-  if (!corrections.length) { list.innerHTML = '<div class="no-corrections">No corrections yet — keep chatting!</div>'; return; }
-  list.innerHTML = corrections.slice(-5).reverse().map(c=>`<div class="correction-item"><div class="corr-wrong">❌ "${esc(c.wrong)}"</div><div class="corr-right">✅ "${esc(c.right)}"</div><div class="corr-why">${esc(c.why)}</div></div>`).join('');
+  if (!corrections.length){list.innerHTML='<div class="no-corrections">No corrections yet — start talking!</div>';return;}
+  list.innerHTML=corrections.slice(-5).reverse().map(c=>`<div class="correction-item"><div class="corr-wrong">❌ "${esc(c.wrong)}"</div><div class="corr-right">✅ "${esc(c.right)}"</div><div class="corr-why">${esc(c.why)}</div></div>`).join('');
 }
 
-function updateSidebar() {
-  const av = document.getElementById('sidebarAvatar'), nm = document.getElementById('sidebarName'), dm = document.getElementById('sidebarDomain');
-  if (userName) { av.textContent=userName[0].toUpperCase(); nm.textContent=userName; dm.textContent=userDomain||'Domain not set'; }
-  else { av.textContent='?'; nm.textContent='Set up account'; dm.textContent='Click to configure'; }
+// ══════ UI HELPERS ══════
+function updateSidebar(){
+  const av=document.getElementById('sidebarAvatar'),nm=document.getElementById('sidebarName'),dm=document.getElementById('sidebarDomain');
+  if(userName){av.textContent=userName[0].toUpperCase();nm.textContent=userName;dm.textContent=userDomain||'Domain not set';}
+  else{av.textContent='?';nm.textContent='Set up account';dm.textContent='Click to configure';}
 }
-
-function updateStats() {
-  document.getElementById('statSessions').textContent = sessionCount;
-  document.getElementById('statCorrections').textContent = corrections.length;
-  const ok = keyPool.filter(k=>k.status==='ok').length;
-  document.getElementById('statKeys').textContent = ok+'/'+keyPool.length;
+function updateStats(){
+  document.getElementById('statSessions').textContent=sessionCount;
+  document.getElementById('statCorrections').textContent=corrections.length;
+  const ok=keyPool.filter(k=>k.status==='ok').length;
+  document.getElementById('statKeys').textContent=ok+'/'+keyPool.length;
 }
-
-function clearChat() {
-  conversationHistory=[]; corrections=[]; sessionStarted=false; pendingMessage=null;
-  hideBanner(); updateCorrectionsList();
-  document.getElementById('messages').innerHTML = `<div class="empty-state" id="emptyState"><div class="empty-emoji">👋</div><div class="empty-title">Hey! I'm Alex.</div><div class="empty-desc">Software engineer based in San Francisco. Let's chat like friends — about work, life, tech, anything! I'll drop a friendly note if I spot any English to polish 🙌</div><button class="btn btn-primary" style="margin-top:14px" onclick="sendGreeting()">Start Talking →</button></div>`;
+function clearChat(){
+  conversationHistory=[]; corrections=[]; sessionStarted=false;
+  if(voiceState==='listening'&&recognition)recognition.stop();
+  stopSpeaking();
+  updateCorrectionsList();
+  document.getElementById('transcript').innerHTML=`<div class="empty-state" id="emptyState"><div class="empty-emoji">🎙️</div><div class="empty-title">Ready to talk with Alex?</div><div class="empty-desc">Click the microphone button below, then speak. Alex will listen, reply out loud, and gently correct your English.</div><button class="btn btn-primary" style="margin-top:14px;display:flex;align-items:center;gap:8px" onclick="startSession()">🎙️ Start Voice Chat →</button></div>`;
+  setVoiceState('idle');
   toast2('Chat cleared','Starting fresh!','accent');
 }
-
-function showPage(id, navEl) {
+function showPage(id,navEl){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  if (navEl) navEl.classList.add('active');
+  if(navEl)navEl.classList.add('active');
 }
-
-function setTopic(el, topic) {
+function setTopic(el,topic){
   document.querySelectorAll('.topic-item').forEach(t=>t.classList.remove('active'));
   el.classList.add('active'); currentTopic=topic;
-  document.getElementById('currentTopicLabel').textContent = topicLabels[topic];
-  toast2('Topic changed', topicLabels[topic], 'accent');
+  document.getElementById('currentTopicLabel').textContent=topicLabels[topic];
+  toast2('Topic changed',topicLabels[topic],'accent');
 }
-
-function toast2(title, body, type='default') {
-  const t = document.getElementById('toast');
+function openModal(id){document.getElementById(id).classList.add('show');}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+function saveSetup(){
+  const name=document.getElementById('setupName').value.trim();
+  const domain=document.getElementById('setupDomain').value.trim();
+  const key=document.getElementById('setupKey').value.trim();
+  if(!name){toast2('Name required','Please enter your name','red');return;}
+  if(keyPool.length===0&&!key){toast2('Key required','Please enter a Groq API key','red');return;}
+  userName=name; userDomain=domain||'tech';
+  localStorage.setItem('prepai_name',userName); localStorage.setItem('prepai_domain',userDomain);
+  if(key)addKey(key);
+  updateSidebar(); updateStats(); closeModal('setupModal');
+  toast2('Welcome, '+userName+'! 🎉','Alex is ready to talk','green');
+}
+function addKeySidebar(){const inp=document.getElementById('sidebarKeyInput');if(addKey(inp.value))inp.value='';}
+function toast2(title,body,type='default'){
+  const t=document.getElementById('toast');
   document.getElementById('toastTitle').textContent=title;
   document.getElementById('toastBody').textContent=body;
   const c={green:'var(--green)',red:'var(--red)',amber:'var(--amber)',accent:'var(--accent2)'};
-  t.style.borderLeftColor = c[type]||'var(--border2)';
-  t.style.borderLeftWidth = c[type] ? '3px' : '1px';
+  t.style.borderLeftColor=c[type]||'var(--border2)'; t.style.borderLeftWidth=c[type]?'3px':'1px';
   t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500);
 }
-
-function handleKey(e) { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
-function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,110)+'px'; }
 </script>
 </body>
 </html>
