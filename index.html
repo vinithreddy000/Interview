@@ -3,282 +3,429 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PrepAI — Advanced Interview Coach</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>PrepAI — Interview Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg-dark:#0a0e27;
-  --bg-card:#141829;
-  --bg-hover:#1a1f3a;
-  --border-soft:rgba(255,255,255,0.05);
-  --border-med:rgba(255,255,255,0.12);
-  --text-primary:#f0f2f9;
-  --text-secondary:#a8afc5;
-  --text-tertiary:#6b7490;
-  --accent-blue:#3b82f6;
-  --accent-purple:#8b5cf6;
-  --accent-teal:#14b8a6;
-  --accent-red:#ef4444;
-  --accent-green:#10b981;
-  --status-listening:#ef4444;
-  --status-thinking:#f59e0b;
-  --status-speaking:#8b5cf6;
-  --radius-sm:8px;
-  --radius-md:12px;
-  --radius-lg:16px;
+:root {
+  --bg: #0f172a;
+  --card: #1a2847;
+  --hover: #243559;
+  --border: rgba(255,255,255,0.1);
+  --text: #f1f5f9;
+  --text-dim: #94a3b8;
+  --accent: #3b82f6;
+  --accent-alt: #8b5cf6;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:var(--bg-dark);color:var(--text-primary);font-family:'Inter',sans-serif;overflow:hidden}
-body{display:flex;flex-direction:column}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
+body { display: flex; }
 
-.container{display:grid;grid-template-columns:260px 1fr;height:100vh;gap:0}
+.shell { display: grid; grid-template-columns: 1fr; height: 100vh; }
 
-/* SIDEBAR */
-.sidebar{background:linear-gradient(180deg,var(--bg-card),var(--bg-dark));border-right:1px solid var(--border-med);overflow-y:auto;display:flex;flex-direction:column;padding:20px 0;gap:20px}
-.sidebar-section{padding:0 12px}
-.logo{padding:0 12px 16px;margin-bottom:8px;border-bottom:1px solid var(--border-soft);display:flex;align-items:center;gap:10px}
-.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent-purple),var(--accent-blue));border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.logo-text{font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;color:var(--text-primary)}
-.logo-sub{font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px}
-.nav-label{font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;margin-bottom:8px;padding:0 4px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;color:var(--text-secondary);border:1px solid transparent;transition:all 0.2s;margin-bottom:4px}
-.nav-item:hover{background:var(--bg-hover);color:var(--text-primary);border-color:var(--border-soft)}
-.nav-item.active{background:rgba(139,92,246,0.15);color:var(--accent-purple);border-color:var(--accent-purple)}
-.nav-badge{margin-left:auto;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;background:rgba(16,185,129,0.2);color:var(--accent-green)}
-.progress-section{padding:0 12px}
-.progress-title{font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;margin-bottom:8px}
-.round-indicator{display:flex;align-items:center;gap:8px;padding:8px;border-radius:var(--radius-sm);margin-bottom:4px;font-size:12px;border:1px solid var(--border-soft);transition:all 0.2s}
-.round-indicator.pending{color:var(--text-tertiary)}
-.round-indicator.active{background:rgba(139,92,246,0.15);border-color:var(--accent-purple);color:var(--accent-purple)}
-.round-indicator.complete{background:rgba(16,185,129,0.15);border-color:var(--accent-green);color:var(--accent-green)}
-.round-dot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;background:var(--bg-hover);border:1px solid var(--border-med)}
-.round-indicator.active .round-dot{background:var(--accent-purple);color:#fff}
-.round-indicator.complete .round-dot{background:var(--accent-green);color:#fff}
-.sidebar-spacer{flex:1}
-.settings-chip{margin:0 12px;padding:10px 12px;background:var(--bg-hover);border:1px solid var(--border-med);border-radius:var(--radius-md);cursor:pointer;display:flex;align-items:center;gap:10px;transition:all 0.2s}
-.settings-chip:hover{background:var(--border-med);border-color:var(--border-med)}
-.user-avatar{width:32px;height:32px;background:linear-gradient(135deg,var(--accent-blue),var(--accent-teal));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
-.user-info{flex:1;min-width:0;font-size:12px}
-.user-name{font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.user-role{font-size:11px;color:var(--text-tertiary)}
+.main { display: flex; flex-direction: column; overflow: hidden; }
 
-/* MAIN */
-.main{display:flex;flex-direction:column;overflow:hidden;background:var(--bg-dark)}
-.topbar{padding:14px 20px;border-bottom:1px solid var(--border-med);display:flex;align-items:center;justify-content:space-between;background:rgba(10,14,39,0.8);backdrop-filter:blur(10px)}
-.topbar-title{font-family:'Outfit',sans-serif;font-size:16px;font-weight:700}
-.topbar-controls{display:flex;gap:10px;align-items:center}
-.status-badge{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:var(--accent-green)}
-.status-dot{width:6px;height:6px;border-radius:50%;background:var(--accent-green);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-.btn{padding:7px 14px;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border-med);background:transparent;color:var(--text-secondary);transition:all 0.2s}
-.btn:hover{background:var(--bg-hover);color:var(--text-primary)}
-.btn-primary{background:var(--accent-purple);border-color:transparent;color:#fff}
-.btn-primary:hover{background:var(--accent-blue)}
-.btn-danger{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:var(--accent-red)}
-
-/* PAGES */
-.page-container{flex:1;overflow-y:auto;display:none}
-.page-container.active{display:flex;flex-direction:column}
-
-/* UPLOAD PAGE */
-.upload-container{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;gap:20px;overflow-y:auto}
-.upload-card{text-align:center;max-width:520px}
-.upload-title{font-family:'Outfit',sans-serif;font-size:28px;font-weight:900;margin-bottom:8px;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.upload-desc{color:var(--text-secondary);font-size:14px;line-height:1.7;margin-bottom:24px}
-.upload-zone{width:100%;max-width:480px;border:2px dashed var(--border-med);border-radius:var(--radius-lg);padding:40px 24px;text-align:center;cursor:pointer;transition:all 0.3s;background:rgba(139,92,246,0.03)}
-.upload-zone:hover,.upload-zone.drag-active{border-color:var(--accent-purple);background:rgba(139,92,246,0.08)}
-.upload-zone input{display:none}
-.upload-icon{font-size:48px;margin-bottom:12px}
-.upload-zone-title{font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px}
-.upload-zone-desc{font-size:13px;color:var(--text-secondary);margin-bottom:14px}
-.upload-formats{font-size:12px;color:var(--text-tertiary)}
-.resume-preview-box{width:100%;max-width:480px;background:var(--bg-card);border:1px solid var(--border-med);border-radius:var(--radius-lg);padding:18px;display:none;margin-top:16px}
-.preview-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.preview-icon{font-size:28px}
-.preview-info{text-align:left;flex:1}
-.preview-name{font-family:'Outfit',sans-serif;font-weight:700;font-size:14px}
-.preview-size{font-size:11px;color:var(--text-tertiary)}
-.preview-content{font-size:12px;color:var(--text-secondary);line-height:1.6;max-height:100px;overflow:hidden;background:rgba(0,0,0,0.2);border-radius:var(--radius-md);padding:10px;margin-bottom:12px;font-style:italic}
-.preview-actions{display:flex;gap:10px}
-.rounds-selector{display:flex;gap:12px;width:100%;max-width:480px;margin-top:20px}
-.round-btn{flex:1;background:var(--bg-card);border:1px solid var(--border-med);border-radius:var(--radius-lg);padding:16px;text-align:center;cursor:pointer;transition:all 0.3s}
-.round-btn:hover{border-color:var(--accent-purple);background:rgba(139,92,246,0.1)}
-.round-btn.locked{opacity:0.4;cursor:not-allowed}
-.round-btn-icon{font-size:24px;margin-bottom:8px}
-.round-btn-title{font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px}
-.round-btn-desc{font-size:11px;color:var(--text-tertiary);line-height:1.4}
-
-/* INTERVIEW PAGE */
-.interview-container{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.interview-header{padding:12px 20px;border-bottom:1px solid var(--border-med);background:linear-gradient(135deg,rgba(139,92,246,0.08),transparent);display:flex;align-items:center;gap:12px}
-.interview-icon{font-size:20px}
-.interview-info{flex:1}
-.interview-round-title{font-family:'Outfit',sans-serif;font-size:14px;font-weight:700}
-.interview-round-sub{font-size:11px;color:var(--text-tertiary)}
-.interview-progress{display:flex;gap:5px;align-items:center}
-.progress-dot{width:6px;height:6px;border-radius:50%;background:var(--border-med);transition:all 0.3s}
-.progress-dot.active{background:var(--accent-purple);box-shadow:0 0 6px var(--accent-purple)}
-.progress-dot.done{background:var(--accent-green)}
-
-.transcript-area{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
-.message{display:flex;gap:10px;max-width:85%;animation:msgIn 0.3s ease-out}
-.message.from-me{align-self:flex-end;flex-direction:row-reverse}
-@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.msg-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
-.msg-avatar.hr{background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff}
-.msg-avatar.tech{background:linear-gradient(135deg,#10b981,#14b8a6);color:#fff}
-.msg-avatar.code{background:linear-gradient(135deg,#3b82f6,#0ea5e9);color:#fff}
-.msg-avatar.me{background:var(--bg-hover);color:var(--accent-purple)}
-.msg-content{display:flex;flex-direction:column;gap:6px}
-.message.from-me .msg-content{align-items:flex-end}
-.msg-name{font-size:10px;color:var(--text-tertiary);font-weight:600}
-.msg-bubble{padding:10px 13px;border-radius:14px;font-size:13px;line-height:1.6;max-width:100%;word-wrap:break-word}
-.msg-bubble.hr{background:#2b2416;border:1px solid rgba(245,158,11,0.2);border-top-left-radius:4px}
-.msg-bubble.tech{background:#182a1f;border:1px solid rgba(16,185,129,0.2);border-top-left-radius:4px}
-.msg-bubble.code{background:#172554;border:1px solid rgba(59,130,246,0.2);border-top-left-radius:4px}
-.msg-bubble.me{background:var(--accent-purple);color:#fff;border-bottom-right-radius:4px}
-.msg-time{font-size:10px;color:var(--text-tertiary)}
-.msg-feedback{margin-top:6px;padding:9px 12px;border-radius:var(--radius-md);font-size:12px;border:1px solid var(--border-med)}
-.feedback-good{background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.3)}
-.feedback-improve{background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.3)}
-.feedback-header{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px}
-.feedback-good .feedback-header{color:var(--accent-green)}
-.feedback-improve .feedback-header{color:#f59e0b}
-.feedback-item{font-size:11px;line-height:1.5;margin-bottom:3px}
-.code-block{background:#0f1419;border:1px solid rgba(59,130,246,0.25);border-radius:var(--radius-md);padding:12px;font-family:'Courier New',monospace;font-size:11px;color:#a8d8ff;margin-top:6px;max-height:160px;overflow-y:auto;white-space:pre-wrap;line-height:1.5}
-.typing-indicator{display:flex;gap:8px;max-width:85%;padding:10px 13px;background:var(--bg-hover);border:1px solid var(--border-med);border-radius:14px;border-top-left-radius:4px}
-.typing-dot{width:6px;height:6px;background:var(--text-tertiary);border-radius:50%;animation:typeDot 1.4s infinite}
-.typing-dot:nth-child(2){animation-delay:0.2s}
-.typing-dot:nth-child(3){animation-delay:0.4s}
-@keyframes typeDot{0%,80%,100%{transform:translateY(0);opacity:0.4}40%{transform:translateY(-6px);opacity:1}}
-
-.recognition-box{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.3);border-radius:var(--radius-md);padding:12px;margin-top:8px;font-size:12px;color:var(--accent-blue)}
-.recognition-label{font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:6px}
-.recognition-text{color:var(--text-secondary);font-style:italic;line-height:1.5}
-.recognition-interim{opacity:0.6}
-
-.controls-area{background:var(--bg-card);border-top:1px solid var(--border-med);padding:16px 20px;display:flex;flex-direction:column;gap:12px}
-.voice-controls{display:flex;align-items:center;gap:14px}
-.mic-button{width:60px;height:60px;border-radius:50%;border:2px solid var(--border-med);background:var(--bg-hover);cursor:pointer;font-size:24px;display:flex;align-items:center;justify-content:center;transition:all 0.3s;flex-shrink:0}
-.mic-button:hover{border-color:var(--accent-purple);transform:scale(1.05)}
-.mic-button.listening{background:linear-gradient(135deg,var(--status-listening),#dc2626);border-color:var(--status-listening);animation:micListen 1.2s ease-in-out infinite}
-.mic-button.thinking{background:linear-gradient(135deg,var(--status-thinking),#fbbf24);border-color:var(--status-thinking)}
-.mic-button.speaking{background:linear-gradient(135deg,var(--status-speaking),var(--accent-blue));border-color:var(--status-speaking);animation:micSpeak 1.2s ease-in-out infinite}
-@keyframes micListen{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.7)}50%{box-shadow:0 0 0 12px rgba(239,68,68,0.2)}}
-@keyframes micSpeak{0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,0.7)}50%{box-shadow:0 0 0 12px rgba(139,92,246,0.2)}}
-.control-info{flex:1}
-.state-text{font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;margin-bottom:2px}
-.state-hint{font-size:11px;color:var(--text-tertiary);line-height:1.4}
-.control-actions{display:flex;gap:8px;align-items:center}
-.stop-btn{padding:6px 12px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-sm);color:var(--accent-red);font-size:11px;font-weight:600;cursor:pointer;display:none}
-.stop-btn.show{display:block}
-.voice-options{display:flex;gap:10px;font-size:11px;align-items:center}
-.voice-select{background:var(--bg-hover);border:1px solid var(--border-med);border-radius:var(--radius-sm);padding:5px 8px;font-family:'Inter',sans-serif;font-size:11px;color:var(--text-secondary);outline:none;cursor:pointer}
-
-.manual-input-area{display:flex;flex-direction:column;gap:8px;padding-top:12px;border-top:1px solid var(--border-med);display:none}
-.manual-input-area.show{display:flex}
-.manual-label{font-size:11px;color:var(--text-tertiary);font-weight:600;text-transform:uppercase;letter-spacing:0.4px}
-.input-group{display:flex;gap:8px}
-.manual-input{flex:1;background:var(--bg-hover);border:1px solid var(--border-med);border-radius:var(--radius-md);padding:10px 12px;font-family:'Inter',sans-serif;font-size:12px;color:var(--text-primary);outline:none;resize:none;max-height:100px}
-.manual-input:focus{border-color:var(--accent-purple)}
-.manual-input::placeholder{color:var(--text-tertiary)}
-.send-btn{padding:10px 14px;background:var(--accent-blue);border:none;border-radius:var(--radius-md);color:#fff;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;flex-shrink:0}
-.send-btn:hover{background:var(--accent-purple)}
-
-/* CODE ROUND */
-.code-editor-area{display:none;padding-top:12px;border-top:1px solid var(--border-med)}
-.code-editor-area.show{display:block}
-.code-label{font-size:11px;color:var(--text-tertiary);font-weight:600;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:6px}
-.code-editor{width:100%;background:#0f1419;border:1px solid rgba(59,130,246,0.3);border-radius:var(--radius-md);padding:12px;font-family:'Courier New',monospace;font-size:11px;color:#a8d8ff;outline:none;resize:none;max-height:140px;line-height:1.6;min-height:70px}
-.code-editor:focus{border-color:var(--accent-blue)}
-.code-editor::placeholder{color:rgba(168,216,255,0.4)}
-
-/* SCORECARD */
-.scorecard-container{flex:1;overflow-y:auto;padding:28px}
-.scorecard-header{text-align:center;margin-bottom:28px}
-.scorecard-title{font-family:'Outfit',sans-serif;font-size:26px;font-weight:900;margin-bottom:6px;background:linear-gradient(135deg,var(--accent-green),var(--accent-teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.scorecard-subtitle{color:var(--text-secondary);font-size:13px}
-.score-display{display:flex;justify-content:center;margin:20px 0}
-.score-ring{width:140px;height:140px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:4px solid var(--accent-green);box-shadow:0 0 32px rgba(16,185,129,0.3)}
-.score-number{font-family:'Outfit',sans-serif;font-size:48px;font-weight:900}
-.score-max{font-size:13px;color:var(--text-tertiary)}
-.scores-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px}
-.score-card{background:var(--bg-card);border:1px solid var(--border-med);border-radius:var(--radius-lg);padding:16px;text-align:center}
-.score-card-label{font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
-.score-card-value{font-family:'Outfit',sans-serif;font-size:28px;font-weight:700;margin-bottom:4px}
-.score-card-note{font-size:11px;color:var(--text-secondary);line-height:1.4}
-.feedback-section{margin-top:24px}
-.feedback-section-title{font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.feedback-item-card{background:var(--bg-card);border:1px solid var(--border-med);border-radius:var(--radius-lg);padding:14px;margin-bottom:10px}
-.feedback-question{font-size:11px;color:var(--text-tertiary);margin-bottom:6px;font-style:italic}
-.feedback-positive{color:var(--accent-green);font-size:12px;margin-bottom:4px;line-height:1.5}
-.feedback-improvement{color:#f59e0b;font-size:12px;line-height:1.5}
-.restart-button{display:block;margin:24px auto 0;padding:12px 32px;background:var(--accent-purple);color:#fff;border:none;border-radius:var(--radius-lg);font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.3s}
-.restart-button:hover{background:var(--accent-blue);transform:translateY(-2px)}
-
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:100;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s}
-.modal-overlay.show{opacity:1;pointer-events:all}
-.modal{background:var(--bg-card);border:1px solid var(--border-med);border-radius:var(--radius-lg);padding:28px;width:420px;max-width:92vw;transform:scale(0.95);opacity:0;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1)}
-.modal-overlay.show .modal{transform:scale(1);opacity:1}
-.modal-close{position:absolute;top:14px;right:14px;background:var(--bg-hover);border:1px solid var(--border-med);border-radius:var(--radius-sm);width:28px;height:28px;cursor:pointer;color:var(--text-secondary);font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
-.modal-close:hover{background:var(--border-med);color:var(--text-primary)}
-.modal-icon{font-size:32px;margin-bottom:10px}
-.modal-title{font-family:'Outfit',sans-serif;font-size:18px;font-weight:700;margin-bottom:6px}
-.modal-desc{font-size:12px;color:var(--text-secondary);margin-bottom:20px;line-height:1.6}
-.form-group{margin-bottom:14px}
-.form-label{font-size:11px;color:var(--text-secondary);font-weight:600;margin-bottom:5px;display:block}
-.form-input{width:100%;background:var(--bg-hover);border:1px solid var(--border-med);border-radius:var(--radius-md);padding:10px 12px;font-family:'Inter',sans-serif;font-size:12px;color:var(--text-primary);outline:none}
-.form-input:focus{border-color:var(--accent-purple)}
-.form-input::placeholder{color:var(--text-tertiary)}
-.modal-btn{width:100%;padding:11px;border-radius:var(--radius-md);background:var(--accent-purple);color:#fff;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s}
-.modal-btn:hover{background:var(--accent-blue)}
-
-/* TOAST */
-.toast{position:fixed;bottom:20px;right:20px;background:var(--bg-card);border:1px solid var(--border-med);border-left:3px solid var(--accent-green);border-radius:var(--radius-md);padding:14px 16px;font-size:12px;z-index:200;transform:translateX(130%);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);max-width:300px;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
-.toast.show{transform:translateX(0)}
-.toast-title{font-weight:600;margin-bottom:2px;color:var(--text-primary)}
-.toast-body{color:var(--text-secondary);font-size:11px}
-.toast.error{border-left-color:var(--accent-red)}
-.toast.warning{border-left-color:#f59e0b}
-
-/* SCROLLBAR */
-::-webkit-scrollbar{width:5px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border-med);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:var(--border-soft)}
-
-@media(max-width:768px){
-  .container{grid-template-columns:1fr}
-  .sidebar{width:100%;position:absolute;left:0;top:0;height:100%;transform:translateX(-100%);transition:transform 0.3s;z-index:99}
-  .message{max-width:92%}
-  .modal{width:90vw}
+.header { 
+  padding: 16px 20px; 
+  border-bottom: 1px solid var(--border); 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
 }
+
+.header-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.header-controls { display: flex; gap: 10px; }
+
+.btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: transparent;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-alt);
+}
+
+.content { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+.upload-box {
+  max-width: 500px;
+  text-align: center;
+}
+
+.upload-box h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.upload-box p {
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.dropzone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 40px 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.dropzone:hover, .dropzone.active {
+  border-color: var(--accent);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.dropzone-icon { font-size: 48px; margin-bottom: 12px; }
+.dropzone-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+.dropzone-sub { font-size: 13px; color: var(--text-dim); margin-bottom: 12px; }
+.dropzone-formats { font-size: 11px; color: var(--text-dim); opacity: 0.7; }
+
+#fileInput { display: none; }
+
+.resume-info {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+  display: none;
+}
+
+.resume-info.show { display: block; }
+
+.resume-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.resume-name { font-weight: 600; }
+.resume-size { font-size: 11px; color: var(--text-dim); }
+.resume-preview { font-size: 12px; color: var(--text-dim); max-height: 100px; overflow: hidden; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; margin-bottom: 12px; max-width: 100%; word-break: break-word; }
+.resume-actions { display: flex; gap: 10px; }
+
+.interview-view { display: none; flex-direction: column; height: 100%; }
+.interview-view.active { display: flex; }
+
+.interview-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(59,130,246,0.1), transparent);
+}
+
+.interview-title { font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; }
+.interview-sub { font-size: 11px; color: var(--text-dim); }
+
+.transcript {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.message {
+  display: flex;
+  gap: 10px;
+  max-width: 85%;
+  animation: msgSlide 0.3s ease-out;
+}
+
+.message.from-me {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+@keyframes msgSlide {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.msg-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.msg-avatar.bot { background: linear-gradient(135deg, var(--accent), var(--accent-alt)); }
+.msg-avatar.user { background: var(--hover); }
+
+.msg-bubble {
+  padding: 10px 13px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.message.from-me .msg-bubble {
+  background: var(--accent);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.message .msg-bubble {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top-left-radius: 4px;
+}
+
+.loading {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 10px 13px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  border-top-left-radius: 4px;
+}
+
+.dot { width: 6px; height: 6px; background: var(--text-dim); border-radius: 50%; animation: bounce 1.4s infinite; }
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,80%,100%{ opacity: 0.4; } 40%{ opacity: 1; } }
+
+.controls {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--card);
+  display: flex;
+  gap: 10px;
+}
+
+.mic-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--hover);
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+
+.mic-btn:hover { transform: scale(1.05); }
+.mic-btn.listening { 
+  background: linear-gradient(135deg, var(--error), #dc2626);
+  border-color: var(--error);
+  animation: pulse 1s infinite;
+}
+@keyframes pulse { 0%,100%{ box-shadow: 0 0 0 0 rgba(239,68,68,0.7); } 50%{ box-shadow: 0 0 0 10px rgba(239,68,68,0.2); } }
+
+.input-area { flex: 1; display: flex; flex-direction: column; }
+.state { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+.hint { font-size: 11px; color: var(--text-dim); }
+
+.text-input {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  display: none;
+}
+
+.text-input.show { display: flex; }
+
+.text-input textarea {
+  flex: 1;
+  background: var(--hover);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--text);
+  outline: none;
+  resize: none;
+  max-height: 80px;
+  min-height: 40px;
+}
+
+.text-input textarea:focus { border-color: var(--accent); }
+.text-input button { padding: 8px 12px; background: var(--accent); border: none; border-radius: 6px; color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; }
+.text-input button:hover { background: var(--accent-alt); }
+
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
+.modal.show { display: flex; }
+
+.modal-content {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90vw;
+}
+
+.modal-title { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.modal-desc { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; line-height: 1.5; }
+
+.form-group { margin-bottom: 12px; }
+.form-label { font-size: 11px; color: var(--text-dim); font-weight: 600; margin-bottom: 4px; display: block; }
+.form-input { width: 100%; background: var(--hover); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text); outline: none; }
+.form-input:focus { border-color: var(--accent); }
+
+.modal-btn { width: 100%; padding: 10px; background: var(--accent); border: none; border-radius: 6px; color: #fff; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; }
+.modal-btn:hover { background: var(--accent-alt); }
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--success);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 12px;
+  z-index: 200;
+  transform: translateX(130%);
+  transition: transform 0.3s;
+  max-width: 300px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.toast.show { transform: translateX(0); }
+.toast.error { border-left-color: var(--error); }
+.toast.warning { border-left-color: var(--warning); }
+
+.toast-title { font-weight: 600; margin-bottom: 2px; }
+.toast-body { color: var(--text-dim); font-size: 11px; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
 </style>
 </head>
 <body>
 
-<div class="modal-overlay" id="setupModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('setupModal')">✕</button>
-    <div class="modal-icon">⚡</div>
-    <div class="modal-title">Get Started with PrepAI</div>
-    <div class="modal-desc">Enter your details and add a free Groq API key to unlock all interview rounds.</div>
+<div class="shell">
+  <main class="main">
+    <div class="header">
+      <div class="header-title">🎯 PrepAI Interview Coach</div>
+      <div class="header-controls">
+        <button class="btn" onclick="resetApp()">🔄 Reset</button>
+        <button class="btn" onclick="openSetupModal()">⚙ Settings</button>
+      </div>
+    </div>
+
+    <!-- UPLOAD PAGE -->
+    <div class="content" id="uploadPage">
+      <div class="upload-box">
+        <h1>Practice Interview</h1>
+        <p>Upload your resume and have a real-time conversation with an AI interviewer. Get instant feedback after each round.</p>
+        
+        <div class="dropzone" id="dropzone" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('fileInput').click()">
+          <div class="dropzone-icon">📎</div>
+          <div class="dropzone-title">Upload Your Resume</div>
+          <div class="dropzone-sub">Click or drag & drop</div>
+          <div class="dropzone-formats">PDF • DOCX • TXT</div>
+        </div>
+
+        <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" onchange="handleFileSelect(event)">
+
+        <div class="resume-info" id="resumeInfo">
+          <div class="resume-header">
+            <span id="resumeIcon">📄</span>
+            <div>
+              <div class="resume-name" id="resumeName"></div>
+              <div class="resume-size" id="resumeSize"></div>
+            </div>
+          </div>
+          <div class="resume-preview" id="resumePreview"></div>
+          <div class="resume-actions">
+            <button class="btn btn-primary" style="flex:1" onclick="startInterview()">Start Interview →</button>
+            <button class="btn" onclick="resetFile()">Change File</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERVIEW PAGE -->
+    <div class="interview-view" id="interviewPage">
+      <div class="interview-header">
+        <div class="interview-title" id="interviewTitle">HR Screening Round</div>
+        <div class="interview-sub" id="interviewSub">Priya Sharma, HR Manager</div>
+      </div>
+
+      <div class="transcript" id="transcript"></div>
+
+      <div class="controls">
+        <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎙️</button>
+        <div class="input-area">
+          <div class="state" id="state">Tap to start</div>
+          <div class="hint" id="hint">Speak naturally or type below</div>
+          <div class="text-input" id="textInput">
+            <textarea placeholder="Or type your answer..." id="answerInput" onkeydown="if(event.ctrlKey && event.key==='Enter') submitText()"></textarea>
+            <button onclick="submitText()">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="setupModal">
+  <div class="modal-content">
+    <div class="modal-title">Setup</div>
+    <div class="modal-desc">Enter your name and Groq API key (free from console.groq.com)</div>
+    
     <div class="form-group">
       <label class="form-label">Your Name</label>
-      <input class="form-input" id="inputName" type="text" placeholder="e.g., Ravi Shankar">
+      <input class="form-input" id="inputName" type="text" placeholder="Your name">
     </div>
+    
     <div class="form-group">
-      <label class="form-label">Your Domain / Field</label>
-      <input class="form-input" id="inputDomain" type="text" placeholder="e.g., Software Engineering">
+      <label class="form-label">Your Field</label>
+      <input class="form-input" id="inputField" type="text" placeholder="e.g., Software Engineering">
     </div>
+    
     <div class="form-group">
-      <label class="form-label">Groq API Key <span style="color:var(--text-tertiary);font-size:10px">(free at console.groq.com)</span></label>
-      <input class="form-input" id="inputKey" type="password" placeholder="gsk_..." autocomplete="off">
+      <label class="form-label">Groq API Key</label>
+      <input class="form-input" id="inputKey" type="password" placeholder="gsk_...">
     </div>
-    <button class="modal-btn" onclick="saveSetup()">Start Interview →</button>
+    
+    <button class="modal-btn" onclick="saveSetup()">Save →</button>
   </div>
 </div>
 
@@ -287,452 +434,114 @@ body{display:flex;flex-direction:column}
   <div class="toast-body" id="toastBody"></div>
 </div>
 
-<div class="container">
-
-<!-- SIDEBAR -->
-<aside class="sidebar">
-  <div class="logo">
-    <div class="logo-icon">🎯</div>
-    <div>
-      <div class="logo-text">PrepAI</div>
-      <div class="logo-sub">Interview Coach</div>
-    </div>
-  </div>
-
-  <div class="sidebar-section">
-    <div class="nav-label">Practice</div>
-    <div class="nav-item" onclick="navigateTo('voice')">
-      <span>🎙️</span> Voice Practice <span class="nav-badge">BETA</span>
-    </div>
-    <div class="nav-label">Interview</div>
-    <div class="nav-item active" onclick="navigateTo('interview')">
-      <span>📋</span> Resume Interview <span class="nav-badge">LIVE</span>
-    </div>
-  </div>
-
-  <div class="progress-section" id="progressSection" style="display:none">
-    <div class="progress-title">Progress</div>
-    <div class="round-indicator pending" id="r1">
-      <div class="round-dot">1</div>
-      <div><div style="font-weight:600">HR Screening</div><div style="font-size:10px;color:var(--text-tertiary)">Priya Sharma</div></div>
-    </div>
-    <div class="round-indicator pending" id="r2">
-      <div class="round-dot">2</div>
-      <div><div style="font-weight:600">Technical Round</div><div style="font-size:10px;color:var(--text-tertiary)">Dr. Ramesh Kumar</div></div>
-    </div>
-    <div class="round-indicator pending" id="r3">
-      <div class="round-dot">3</div>
-      <div><div style="font-weight:600">Coding Round</div><div style="font-size:10px;color:var(--text-tertiary)">Live Problems</div></div>
-    </div>
-  </div>
-
-  <div class="sidebar-spacer"></div>
-
-  <div class="settings-chip" onclick="openModal('setupModal')">
-    <div class="user-avatar" id="userAvatar">?</div>
-    <div class="user-info">
-      <div class="user-name" id="userName">Set up account</div>
-      <div class="user-role" id="userRole">Click to configure</div>
-    </div>
-  </div>
-</aside>
-
-<!-- MAIN CONTENT -->
-<main class="main">
-  <div class="topbar">
-    <div class="topbar-title" id="pageTitle">📋 Resume Interview</div>
-    <div class="topbar-controls">
-      <div class="status-badge" id="statusBadge">
-        <div class="status-dot"></div>
-        <span id="statusText">Ready</span>
-      </div>
-      <button class="btn" onclick="resetInterview()">🔄 Reset</button>
-      <button class="btn" onclick="openModal('setupModal')">⚙ Settings</button>
-    </div>
-  </div>
-
-  <!-- UPLOAD PAGE -->
-  <div class="page-container active" id="uploadPage">
-    <div class="upload-container">
-      <div class="upload-card">
-        <div class="upload-title">AI Interview</div>
-        <div class="upload-desc">Upload your resume and practice a complete 3-round interview with AI interviewers. Get real-time feedback and a detailed scorecard.</div>
-      </div>
-
-      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-        <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" onchange="handleFileSelect(event)">
-        <div class="upload-icon">📎</div>
-        <div class="upload-zone-title">Drop your resume here</div>
-        <div class="upload-zone-desc">or click to browse</div>
-        <div class="upload-formats">PDF · DOCX · TXT supported</div>
-      </div>
-
-      <div class="resume-preview-box" id="previewBox">
-        <div class="preview-head">
-          <div class="preview-icon" id="previewIcon">📄</div>
-          <div class="preview-info">
-            <div class="preview-name" id="previewName">resume.pdf</div>
-            <div class="preview-size" id="previewSize"></div>
-          </div>
-        </div>
-        <div class="preview-content" id="previewContent">Reading resume...</div>
-        <div class="preview-actions">
-          <button class="btn btn-primary" onclick="startRound(1)" style="flex:1">Start Round 1 →</button>
-          <button class="btn" onclick="resetInterview()">Change File</button>
-        </div>
-      </div>
-
-      <div class="rounds-selector" id="roundsGrid" style="display:none">
-        <div class="round-btn" onclick="startRound(1)">
-          <div class="round-btn-icon">👩‍💼</div>
-          <div class="round-btn-title">Round 1</div>
-          <div class="round-btn-desc">HR Screening</div>
-        </div>
-        <div class="round-btn locked" id="round2Btn">
-          <div class="round-btn-icon">👨‍💻</div>
-          <div class="round-btn-title">Round 2</div>
-          <div class="round-btn-desc">Technical</div>
-        </div>
-        <div class="round-btn locked" id="round3Btn">
-          <div class="round-btn-icon">💻</div>
-          <div class="round-btn-title">Round 3</div>
-          <div class="round-btn-desc">Coding</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- INTERVIEW PAGE -->
-  <div class="page-container" id="interviewPage">
-    <div class="interview-header">
-      <div class="interview-icon" id="roundIcon">👩‍💼</div>
-      <div class="interview-info">
-        <div class="interview-round-title" id="roundTitle">Round 1 — HR Screening</div>
-        <div class="interview-round-sub" id="roundSub">Priya Sharma, HR Manager</div>
-      </div>
-      <div class="interview-progress" id="progressDots"></div>
-      <button class="btn btn-danger" onclick="endCurrentRound()">End Round →</button>
-    </div>
-
-    <div class="transcript-area" id="transcript"></div>
-
-    <div class="controls-area">
-      <div class="voice-controls">
-        <button class="mic-button" id="micBtn" onclick="toggleMic()">🎙️</button>
-        <div class="control-info">
-          <div class="state-text" id="stateText">Tap to start</div>
-          <div class="state-hint" id="stateHint">Speak your answer naturally</div>
-        </div>
-        <div class="control-actions">
-          <button class="stop-btn" id="stopBtn" onclick="stopSpeech()">⏹ Stop</button>
-        </div>
-      </div>
-
-      <div class="manual-input-area" id="manualInputArea">
-        <div class="manual-label">Or type your answer:</div>
-        <div class="input-group">
-          <textarea class="manual-input" id="manualInput" placeholder="Type your answer here..." onkeydown="if(event.ctrlKey&&event.key==='Enter'){event.preventDefault();submitManualAnswer()}"></textarea>
-          <button class="send-btn" onclick="submitManualAnswer()">Send</button>
-        </div>
-      </div>
-
-      <div class="code-editor-area" id="codeArea">
-        <div class="code-label">Submit Your Code:</div>
-        <textarea class="code-editor" id="codeEditor" placeholder="paste or type your code here..." onkeydown="if(event.ctrlKey&&event.key==='Enter'){event.preventDefault();submitCode()}"></textarea>
-        <button class="send-btn" style="margin-top:8px;width:100%" onclick="submitCode()">Submit Code →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCORECARD PAGE -->
-  <div class="page-container" id="scorecardPage">
-    <div class="scorecard-container">
-      <div class="scorecard-header">
-        <div class="scorecard-title">🏆 Interview Complete</div>
-        <div class="scorecard-subtitle">Your performance report</div>
-      </div>
-
-      <div class="score-display">
-        <div class="score-ring">
-          <div class="score-number" id="finalScore">--</div>
-          <div class="score-max">/10</div>
-        </div>
-      </div>
-
-      <div class="scores-grid">
-        <div class="score-card">
-          <div class="score-card-label">HR Round</div>
-          <div class="score-card-value" id="hrScore">--</div>
-          <div class="score-card-note">Communication</div>
-        </div>
-        <div class="score-card">
-          <div class="score-card-label">Technical</div>
-          <div class="score-card-value" id="techScore">--</div>
-          <div class="score-card-note">Knowledge</div>
-        </div>
-        <div class="score-card">
-          <div class="score-card-label">Coding</div>
-          <div class="score-card-value" id="codeScore">--</div>
-          <div class="score-card-note">Problem Solving</div>
-        </div>
-      </div>
-
-      <div id="feedbackContainer"></div>
-
-      <button class="restart-button" onclick="resetInterview()">🔄 Start New Interview</button>
-    </div>
-  </div>
-
-</main>
-
-</div>
-
 <script>
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
-const RATE_LIMIT_MS = 62000;
 
-let state = {
-  user: { name: '', domain: '' },
+let config = {
+  name: '',
+  field: '',
+  apiKey: '',
   resume: '',
-  currentRound: 0,
-  roundsDone: { 1: false, 2: false, 3: false },
   history: [],
-  qaLog: [],
-  scores: { 1: null, 2: null, 3: null },
-  codingLang: 'python',
-  needsCoding: true,
-  keys: []
+  roundCount: 0
 };
 
-let speech = {
-  recognition: null,
-  synthesis: window.speechSynthesis,
-  voices: [],
-  state: 'idle',
-  interim: '',
-  final: '',
-  silenceTimer: null
-};
+let speechRec = null;
+let speechSynth = window.speechSynthesis;
+let isListening = false;
 
 window.addEventListener('load', () => {
-  loadState();
+  loadConfig();
   initSpeechRecognition();
-  syncUI();
-  if (!state.user.name || !state.keys.length) {
-    setTimeout(() => openModal('setupModal'), 500);
+  if (!config.name || !config.apiKey) {
+    openSetupModal();
   }
 });
 
-// INITIALIZATION
-function loadState() {
-  const stored = localStorage.getItem('prepai_state');
-  if (stored) {
-    try { Object.assign(state, JSON.parse(stored)); }
-    catch (e) { }
+// CONFIG
+function loadConfig() {
+  const saved = localStorage.getItem('prepai_config');
+  if (saved) {
+    try {
+      config = { ...config, ...JSON.parse(saved) };
+    } catch (e) {}
   }
 }
 
-function saveState() {
-  localStorage.setItem('prepai_state', JSON.stringify(state));
+function saveConfig() {
+  localStorage.setItem('prepai_config', JSON.stringify(config));
 }
 
-function initSpeechRecognition() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) {
-    toast('Speech recognition not available', 'Use manual text input instead', 'warning');
+function openSetupModal() {
+  document.getElementById('inputName').value = config.name;
+  document.getElementById('inputField').value = config.field;
+  document.getElementById('inputKey').value = config.apiKey;
+  document.getElementById('setupModal').classList.add('show');
+}
+
+function saveSetup() {
+  const name = document.getElementById('inputName').value.trim();
+  const field = document.getElementById('inputField').value.trim();
+  const key = document.getElementById('inputKey').value.trim();
+
+  if (!name) {
+    toast('Name required', 'error');
     return;
   }
 
-  speech.recognition = new SR();
-  speech.recognition.continuous = true;
-  speech.recognition.interimResults = true;
-  speech.recognition.lang = 'en-US';
-
-  speech.recognition.onstart = () => {
-    speech.final = '';
-    speech.interim = '';
-    setSpeechState('listening');
-  };
-
-  speech.recognition.onresult = (e) => {
-    speech.interim = '';
-    for (let i = e.resultIndex; i < e.results.length; i++) {
-      const trans = e.results[i][0].transcript;
-      if (e.results[i].isFinal) {
-        speech.final += trans + ' ';
-      } else {
-        speech.interim += trans;
-      }
-    }
-    updateRecognitionDisplay(speech.final + speech.interim);
-    clearTimeout(speech.silenceTimer);
-    speech.silenceTimer = setTimeout(flushSpeech, 2000);
-  };
-
-  speech.recognition.onerror = (e) => {
-    if (e.error === 'no-speech') return;
-    if (e.error === 'not-allowed') {
-      toast('Microphone blocked', 'Allow microphone in browser settings', 'error');
-      setSpeechState('idle');
-      return;
-    }
-    if (speech.state === 'listening') {
-      setTimeout(() => {
-        try { speech.recognition.start(); }
-        catch (e) { }
-      }, 200);
-    }
-  };
-
-  speech.recognition.onend = () => {
-    if (speech.state === 'listening') {
-      try { speech.recognition.start(); }
-      catch (e) { }
-    }
-  };
-}
-
-function setSpeechState(newState) {
-  speech.state = newState;
-  const btn = document.getElementById('micBtn');
-  const text = document.getElementById('stateText');
-  const hint = document.getElementById('stateHint');
-  const stop = document.getElementById('stopBtn');
-
-  btn.className = 'mic-button ' + newState;
-
-  const states = {
-    idle: { emoji: '🎙️', text: 'Tap to start', hint: 'Speak your answer naturally', stop: false },
-    listening: { emoji: '🔴', text: 'Listening...', hint: 'Speak clearly, we are listening...', stop: true },
-    thinking: { emoji: '💭', text: 'Processing...', hint: 'Analyzing your answer...', stop: false },
-    speaking: { emoji: '🔊', text: 'Interviewer speaking', hint: 'Tap Stop to interrupt', stop: true }
-  };
-
-  const st = states[newState] || states.idle;
-  btn.textContent = st.emoji;
-  text.textContent = st.text;
-  hint.textContent = st.hint;
-  stop.classList.toggle('show', st.stop);
-}
-
-// SPEECH HANDLING
-function toggleMic() {
-  if (speech.state === 'listening') {
-    stopSpeech();
-  } else if (speech.state === 'speaking') {
-    speech.synthesis.cancel();
-    setSpeechState('idle');
-  } else if (speech.state === 'idle') {
-    if (!state.keys.length) {
-      openModal('setupModal');
-      return;
-    }
-    startListening();
-  }
-}
-
-function startListening() {
-  if (!speech.recognition) {
-    document.getElementById('manualInputArea').classList.add('show');
-    toast('Use manual input', 'Speech recognition not available', 'warning');
+  if (!key) {
+    toast('API key required', 'error');
     return;
   }
-  speech.final = '';
-  speech.interim = '';
-  try {
-    speech.recognition.start();
-  } catch (e) { }
-}
 
-function stopSpeech() {
-  clearTimeout(speech.silenceTimer);
-  try {
-    speech.recognition.stop();
-  } catch (e) { }
-  setSpeechState('idle');
-  flushSpeech();
-}
+  config.name = name;
+  config.field = field || 'Technology';
+  config.apiKey = key;
+  saveConfig();
 
-function flushSpeech() {
-  const answer = (speech.final + speech.interim).trim();
-  if (!answer) return;
-  submitAnswer(answer);
-}
-
-function updateRecognitionDisplay(text) {
-  let box = document.querySelector('.recognition-box');
-  if (!box) {
-    const area = document.getElementById('transcript');
-    box = document.createElement('div');
-    box.className = 'recognition-box';
-    box.innerHTML = `<div class="recognition-label">🎤 You said:</div><div class="recognition-text" id="recText"></div>`;
-    area.appendChild(box);
-  }
-  document.getElementById('recText').innerHTML = escapeHtml(text);
-}
-
-function clearRecognitionDisplay() {
-  const box = document.querySelector('.recognition-box');
-  if (box) box.remove();
+  document.getElementById('setupModal').classList.remove('show');
+  toast('Setup saved ✓', 'success');
 }
 
 // FILE UPLOAD
 function handleDrop(e) {
   e.preventDefault();
-  e.stopPropagation();
-  document.getElementById('uploadZone').classList.remove('drag-active');
+  document.getElementById('dropzone').classList.remove('active');
   const file = e.dataTransfer.files[0];
-  console.log('File dropped:', file); // Debug
   if (file) processFile(file);
 }
 
 function handleDragOver(e) {
   e.preventDefault();
-  e.stopPropagation();
-  document.getElementById('uploadZone').classList.add('drag-active');
+  document.getElementById('dropzone').classList.add('active');
 }
 
 function handleDragLeave(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  document.getElementById('uploadZone').classList.remove('drag-active');
+  document.getElementById('dropzone').classList.remove('active');
 }
 
 function handleFileSelect(e) {
   const file = e.target.files[0];
-  console.log('File selected:', file); // Debug
-  if (file) {
-    console.log('Processing file:', file.name, file.size, file.type); // Debug
-    processFile(file);
-  } else {
-    console.log('No file selected'); // Debug
-    toast('No file', 'Please select a file', 'error');
-  }
+  if (file) processFile(file);
 }
 
 async function processFile(file) {
-  if (!file) {
-    toast('No file', 'Please select a file', 'error');
-    return;
-  }
-
   const ext = file.name.split('.').pop().toLowerCase();
   
-  // Validate file type
   if (!['pdf', 'doc', 'docx', 'txt'].includes(ext)) {
-    toast('Invalid format', 'Use PDF, DOCX, or TXT', 'error');
+    toast('Invalid format. Use PDF, DOCX, or TXT', 'error');
     return;
   }
 
-  const preview = document.getElementById('previewBox');
+  const icon = ext === 'pdf' ? '📕' : ext === 'docx' || ext === 'doc' ? '📘' : '📄';
+  const info = document.getElementById('resumeInfo');
 
-  document.getElementById('uploadZone').style.display = 'none';
-  preview.style.display = 'block';
-  document.getElementById('previewName').textContent = file.name;
-  document.getElementById('previewSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
-  document.getElementById('previewIcon').textContent = ext === 'pdf' ? '📕' : ext === 'docx' || ext === 'doc' ? '📘' : '📄';
-  document.getElementById('previewContent').textContent = 'Reading file…';
+  document.getElementById('resumeIcon').textContent = icon;
+  document.getElementById('resumeName').textContent = file.name;
+  document.getElementById('resumeSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
+  document.getElementById('resumePreview').textContent = 'Reading…';
+  info.classList.add('show');
 
   try {
     let text = '';
@@ -740,618 +549,313 @@ async function processFile(file) {
     if (ext === 'txt') {
       text = await file.text();
     } else if (ext === 'pdf') {
-      text = await extractPDFText(file);
-    } else if (ext === 'docx' || ext === 'doc') {
-      // For DOCX/DOC, try to extract text or use placeholder
+      text = '[PDF file loaded - content extraction requires server-side processing]';
+    } else {
       try {
         text = await file.text();
-        text = text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+        text = text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 500);
+        if (text.length < 20) text = '[Document file loaded]';
       } catch (e) {
-        text = '[DOCX file loaded - content extraction not fully supported in browser]';
+        text = '[Document file loaded]';
       }
-      if (text.length < 60) text = '[Resume content loaded]';
     }
 
-    if (!text || text.length < 10) {
-      text = '[Resume file loaded - proceeding with interview]';
-    }
-
-    state.resume = text.slice(0, 4000);
-    document.getElementById('previewContent').textContent = state.resume.slice(0, 200) + '…';
-    document.getElementById('roundsGrid').style.display = 'flex';
-
-    // Detect coding language
-    const codingKeywords = ['python', 'javascript', 'java', 'c++', 'go', 'rust', 'kotlin', 'swift', 'typescript', 'golang'];
-    const resumeLower = text.toLowerCase();
-    state.codingLang = codingKeywords.find(k => resumeLower.includes(k)) || 'python';
-    state.needsCoding = codingKeywords.some(k => resumeLower.includes(k));
-
-    if (!state.needsCoding) {
-      document.getElementById('round3Btn').style.opacity = '0.4';
-      document.getElementById('round3Btn').onclick = null;
-    }
-
-    saveState();
-    toast('✅ Resume uploaded', 'Click "Start Round 1" to begin', 'success');
+    config.resume = text.slice(0, 2000);
+    document.getElementById('resumePreview').textContent = config.resume;
+    toast('Resume loaded ✓', 'success');
   } catch (err) {
-    console.error('File processing error:', err);
-    document.getElementById('previewContent').textContent = 'Error reading file. Try .txt format instead.';
-    toast('Upload failed', err.message || 'Try a .txt version of your resume', 'error');
+    document.getElementById('resumePreview').textContent = 'Could not read file';
+    toast('Error reading file', 'error');
   }
 }
 
-async function extractPDFText(file) {
-  return new Promise(resolve => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      try {
-        const bytes = new Uint8Array(e.target.result);
-        const text = new TextDecoder('latin1').decode(bytes);
-        const matches = text.match(/\(([^)]{2,200})\)/g) || [];
-        let extracted = matches.map(m => m.slice(1, -1)).filter(m => /[a-zA-Z]{2,}/.test(m)).join(' ');
-        if (extracted.length < 100) {
-          extracted = text.replace(/[^\x20-\x7E\n]/g, ' ').replace(/\s+/g, ' ');
-        }
-        resolve(extracted.slice(0, 4000) || '[PDF loaded]');
-      } catch (err) {
-        resolve('[PDF extraction failed]');
-      }
-    };
-    reader.readAsArrayBuffer(file);
-  });
+function resetFile() {
+  config.resume = '';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('resumeInfo').classList.remove('show');
 }
 
 // INTERVIEW
-async function startRound(round) {
-  state.currentRound = round;
-  state.history = [];
-  state.qaLog = [];
-
-  navigateTo('interview');
-  document.getElementById('progressSection').style.display = 'block';
-  updateProgressUI();
-
-  const headers = {
-    1: { icon: '👩‍💼', title: 'Round 1 — HR Screening', sub: 'Priya Sharma, HR Manager' },
-    2: { icon: '👨‍💻', title: 'Round 2 — Technical Interview', sub: 'Dr. Ramesh Kumar, Principal Engineer' },
-    3: { icon: '💻', title: 'Round 3 — Coding Challenge', sub: 'Live Problem Solving' }
-  };
-
-  const h = headers[round];
-  document.getElementById('roundIcon').textContent = h.icon;
-  document.getElementById('roundTitle').textContent = h.title;
-  document.getElementById('roundSub').textContent = h.sub;
-
-  // Setup progress dots
-  const dots = document.getElementById('progressDots');
-  dots.innerHTML = '';
-  for (let i = 0; i < 6; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'progress-dot';
-    dots.appendChild(dot);
+async function startInterview() {
+  if (!config.resume) {
+    toast('Upload a resume first', 'warning');
+    return;
   }
 
-  // Toggle code editor for round 3
-  document.getElementById('codeArea').classList.toggle('show', round === 3);
-  document.getElementById('manualInputArea').classList.remove('show');
+  config.history = [];
+  config.roundCount = 0;
 
-  clearRecognitionDisplay();
-  setSpeechState('thinking');
+  document.getElementById('uploadPage').style.display = 'none';
+  document.getElementById('interviewPage').classList.add('active');
 
-  const prompt = getSystemPrompt(round, 'open');
-  const resp = await callGroq([{ role: 'user', content: '[START]' }], prompt);
+  await askQuestion();
+}
 
-  if (resp) {
-    const msg = cleanResponse(resp);
-    state.history.push({ role: 'assistant', content: resp });
-    addMessage('interviewer', msg, round);
-    setSpeechState('speaking');
-    speakText(msg, () => {
-      setSpeechState('idle');
-      setTimeout(() => startListening(), 300);
-    });
-  } else {
-    setSpeechState('idle');
-    toast('API Error', 'Add a Groq key or wait a moment', 'error');
+async function askQuestion() {
+  setState('Thinking…', '');
+  showLoading();
+
+  const isFirst = config.history.length === 0;
+  
+  const systemPrompt = `You are Priya Sharma, a friendly HR Manager conducting a phone screening interview. 
+The candidate is ${config.name}, who works in ${config.field}.
+
+CANDIDATE RESUME:
+${config.resume}
+
+Your job: Ask one HR screening question at a time. Questions should cover:
+- Current role and experience
+- Why they're looking for a change
+- Salary expectations
+- Availability to join
+
+Keep responses SHORT (2-3 sentences max). Sound natural and conversational.
+After about 5-6 questions, say "[INTERVIEW_COMPLETE]" at the end of your response.`;
+
+  const userMessage = isFirst ? '[START]' : 'Got it. Next question please.';
+  
+  try {
+    const response = await callAPI(systemPrompt, userMessage);
+    removeLoading();
+
+    if (!response) {
+      toast('API Error - check your key', 'error');
+      setState('Error', 'Check your Groq API key');
+      return;
+    }
+
+    config.history.push({ role: 'assistant', content: response });
+    
+    const isComplete = response.includes('[INTERVIEW_COMPLETE]');
+    const cleanResponse = response.replace('[INTERVIEW_COMPLETE]', '').trim();
+
+    addMessage('bot', cleanResponse);
+    setState('Listening…', 'Speak when ready');
+    
+    // Auto-speak the question
+    speak(cleanResponse);
+
+    if (isComplete) {
+      setTimeout(() => {
+        setState('Interview Complete', 'Thank you!');
+        document.getElementById('micBtn').disabled = true;
+        toast('Interview finished', 'success');
+      }, 2000);
+    }
+  } catch (err) {
+    removeLoading();
+    toast('Error: ' + err.message, 'error');
+    setState('Error', 'Try again');
   }
 }
 
 async function submitAnswer(text) {
-  clearRecognitionDisplay();
-  stopSpeech();
-
   if (!text.trim()) return;
 
-  addMessage('me', text);
-  state.history.push({ role: 'user', content: text });
+  addMessage('user', text);
+  config.history.push({ role: 'user', content: text });
 
-  setSpeechState('thinking');
+  setState('Processing…', '');
+  showLoading();
 
-  const prompt = getSystemPrompt(state.currentRound, 'continue');
-  const resp = await callGroq(state.history, prompt);
+  const systemPrompt = `You are Priya Sharma, an HR Manager. The candidate just said: "${text}"
 
-  if (!resp) {
-    setSpeechState('idle');
-    toast('Rate limited', 'Wait or add another key', 'warning');
-    document.getElementById('manualInputArea').classList.add('show');
-    return;
-  }
-
-  const { msg, feedback, isEnding } = parseResponse(resp);
-  state.history.push({ role: 'assistant', content: resp });
-
-  if (feedback) {
-    state.qaLog.push({ question: state.currentQuestion || 'Q', answer: text, feedback });
-  }
-
-  addMessage('interviewer', msg, state.currentRound, feedback);
-  state.currentQuestion = msg;
-
-  const maxQ = { 1: 6, 2: 8, 3: 5 };
-  const questionCount = state.history.filter(h => h.role === 'user').length;
-
-  if (isEnding || questionCount >= maxQ[state.currentRound]) {
-    await endRound();
-  } else {
-    setSpeechState('speaking');
-    speakText(msg, () => {
-      setSpeechState('idle');
-      setTimeout(() => startListening(), 300);
-    });
-  }
-
-  updateProgressDots();
-}
-
-function submitManualAnswer() {
-  const input = document.getElementById('manualInput');
-  const text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  submitAnswer(text);
-}
-
-async function submitCode() {
-  const code = document.getElementById('codeEditor').value.trim();
-  if (!code) {
-    toast('Empty', 'Write your code first', 'warning');
-    return;
-  }
-
-  addMessage('me', '[Code Submission]\n' + code.slice(0, 100) + '…');
-  state.history.push({ role: 'user', content: '[CODE]\n' + code });
-
-  setSpeechState('thinking');
-
-  const prompt = getSystemPrompt(3, 'evaluate');
-  const resp = await callGroq(state.history, prompt);
-
-  if (!resp) {
-    setSpeechState('idle');
-    return;
-  }
-
-  const { msg, feedback, isEnding } = parseResponse(resp);
-  state.history.push({ role: 'assistant', content: resp });
-
-  if (feedback) {
-    state.qaLog.push({ question: 'Coding', answer: '[code]', feedback });
-  }
-
-  addMessage('interviewer', msg, 3, feedback);
-
-  if (isEnding) {
-    await endRound();
-  } else {
-    setSpeechState('speaking');
-    speakText(msg, () => {
-      setSpeechState('idle');
-      setTimeout(() => startListening(), 300);
-    });
-  }
-}
-
-async function endRound() {
-  state.roundsDone[state.currentRound] = true;
-  updateProgressUI();
-
-  setSpeechState('thinking');
-
-  const prompt = getSystemPrompt(state.currentRound, 'score');
-  const scoreResp = await callGroq(state.history, prompt);
-
-  if (scoreResp) {
-    try {
-      const match = scoreResp.match(/\[SCORE\]([\s\S]*?)\[\/SCORE\]/);
-      if (match) {
-        const data = JSON.parse(match[1]);
-        state.scores[state.currentRound] = data.score;
-      }
-    } catch (e) { }
-  }
-
-  const closePrompt = {
-    1: 'Close warmly. Thank them, mention the next round will be technical.',
-    2: 'Close professionally. Thank them for their time, mention final coding round.',
-    3: 'Close the interview. Thank them, mention they will hear soon about results.'
-  };
-
-  const closeResp = await callGroq(state.history, closePrompt[state.currentRound]);
-  const closeMsg = cleanResponse(closeResp || 'Thank you for your time. We will be in touch!');
-
-  addMessage('interviewer', closeMsg, state.currentRound);
-
-  setSpeechState('speaking');
-  speakText(closeMsg, () => {
-    setSpeechState('idle');
-    setTimeout(() => {
-      const next = state.currentRound + 1;
-      if (next <= 3 && (next < 3 || state.needsCoding)) {
-        document.getElementById('round' + next + 'Btn').classList.remove('locked');
-        document.getElementById('round' + next + 'Btn').onclick = () => startRound(next);
-        addSystemMessage('✅ Round ' + state.currentRound + ' complete. Click Round ' + next + ' to continue.');
-      } else {
-        setTimeout(buildScorecard, 1500);
-      }
-    }, 1500);
-  });
-}
-
-function buildScorecard() {
-  navigateTo('scorecard');
-
-  const r1 = state.scores[1] || 6.5;
-  const r2 = state.scores[2] || 6.5;
-  const r3 = state.needsCoding ? (state.scores[3] || 6.5) : null;
-
-  const scores = [r1, r2];
-  if (r3 !== null) scores.push(r3);
-
-  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-  const final = Math.round(avg * 10) / 10;
-
-  document.getElementById('finalScore').textContent = final.toFixed(1);
-  document.getElementById('hrScore').textContent = r1.toFixed(1);
-  document.getElementById('techScore').textContent = r2.toFixed(1);
-  document.getElementById('codeScore').textContent = r3 ? r3.toFixed(1) : 'N/A';
-
-  let fbHtml = '';
-  if (state.qaLog.length) {
-    fbHtml += '<div class="feedback-section"><div class="feedback-section-title">📋 Question Feedback</div>';
-    state.qaLog.slice(0, 8).forEach(item => {
-      if (!item.feedback) return;
-      fbHtml += `
-        <div class="feedback-item-card">
-          <div class="feedback-question">${escapeHtml(item.question.slice(0, 80))}…</div>
-          ${item.feedback.good ? `<div class="feedback-positive">✅ ${escapeHtml(item.feedback.good)}</div>` : ''}
-          ${item.feedback.improve ? `<div class="feedback-improvement">💡 ${escapeHtml(item.feedback.improve)}</div>` : ''}
-        </div>
-      `;
-    });
-    fbHtml += '</div>';
-  }
-  document.getElementById('feedbackContainer').innerHTML = fbHtml;
-
-  saveState();
-}
-
-// API & HELPERS
-async function callGroq(messages, systemPrompt) {
-  const key = state.keys[0];
-  if (!key) return null;
+Respond naturally with a follow-up HR question or comment. Keep it SHORT (2-3 sentences).
+After about 5-6 total exchanges, end with the word "[INTERVIEW_COMPLETE]" at the end of your response.`;
 
   try {
-    const r = await fetch(GROQ_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + key
-      },
-      body: JSON.stringify({
-        model: GROQ_MODEL,
-        max_tokens: 600,
-        temperature: 0.7,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          ...messages
-        ]
-      })
-    });
+    const response = await callAPI(systemPrompt, text);
+    removeLoading();
 
-    if (r.status === 429) {
-      state.keys.shift();
-      saveState();
-      return null;
+    if (!response) {
+      toast('API Error', 'error');
+      return;
     }
 
-    if (!r.ok) {
-      const err = await r.json().catch(() => ({}));
-      throw new Error(err.error?.message || 'API Error');
+    config.history.push({ role: 'assistant', content: response });
+    
+    const isComplete = response.includes('[INTERVIEW_COMPLETE]');
+    const cleanResponse = response.replace('[INTERVIEW_COMPLETE]', '').trim();
+
+    addMessage('bot', cleanResponse);
+    setState('Listening…', 'Your turn');
+    
+    speak(cleanResponse);
+
+    if (isComplete) {
+      setTimeout(() => {
+        setState('Interview Complete', '✓ Done!');
+        document.getElementById('micBtn').disabled = true;
+      }, 2000);
     }
-
-    const data = await r.json();
-    return data.choices?.[0]?.message?.content || '';
-  } catch (e) {
-    console.error('API Error:', e);
-    return null;
+  } catch (err) {
+    removeLoading();
+    toast('Error', 'error');
   }
 }
 
-function getSystemPrompt(round, mode) {
-  const resume = state.resume || '[No resume provided]';
-  const name = state.user.name || 'Candidate';
-  const domain = state.user.domain || 'Technology';
-
-  if (round === 1) {
-    const base = `You are Priya Sharma, a warm professional HR Manager conducting a telephonic screening. Speak in a friendly, professional Indian English style. Use phrases like "So tell me", "I see", "That's great", "Alright then".
-
-CANDIDATE: ${name}
-DOMAIN: ${domain}
-RESUME:
-${resume}
-
-INTERVIEW TOPICS (one per message):
-1. Warm greeting and brief intro
-2. Current location and relocation preference
-3. Current CTC and salary expectations
-4. Years of experience and current role
-5. Why looking for a change
-6. Brief summary from resume
-7. Notice period
-
-Keep it natural and conversational. React to their answers genuinely.`;
-    if (mode === 'open') return base + '\n\nGive a warm opening greeting and ask your first question.';
-    if (mode === 'continue') return base + '\n\nRespond to their last answer warmly, then ask the next question. If all topics covered or 6 exchanges done, close with [END_ROUND].\nAppend: [FEEDBACK]{"good":"what they did well","improve":"area to improve"}[/FEEDBACK]';
-    if (mode === 'score') return `Rate this HR screening out of 10. Reply ONLY: [SCORE]{"score":7.5}[/SCORE]`;
-  }
-
-  if (round === 2) {
-    const base = `You are Dr. Ramesh Kumar, a Principal Engineer with 30+ years experience. You are calm, authoritative, and deeply technical. Speak in a professional Indian English style.
-
-CANDIDATE: ${name}
-DOMAIN: ${domain}
-RESUME:
-${resume}
-
-Your job: Ask probing technical questions based on their resume. Go deep into architecture, design decisions, challenges they faced. Test their real understanding, not just keywords. One question at a time. Maximum 8 exchanges.`;
-    if (mode === 'open') return base + '\n\nGive a professional opening. Introduce yourself briefly, then ask a deep technical question based on their most prominent skill.';
-    if (mode === 'continue') return base + '\n\nEvaluate their last answer briefly, then ask the next technical question. If 8 exchanges done, close with [END_ROUND].\nAppend: [FEEDBACK]{"good":"technical strength shown","improve":"area lacking depth"}[/FEEDBACK]';
-    if (mode === 'score') return `Rate this technical interview out of 10. Reply ONLY: [SCORE]{"score":7.0}[/SCORE]`;
-  }
-
-  if (round === 3) {
-    const base = `You are a coding interviewer. The candidate's primary language is ${state.codingLang}.
-
-CANDIDATE: ${name}
-RESUME:
-${resume}
-
-Your job: Give 2-5 coding problems appropriate for their level. When they submit code:
-1. Verify if it's correct
-2. Mention time/space complexity
-3. Suggest optimal approach if available
-4. If wrong, explain the bug
-
-Be encouraging but honest. Maximum 5 problems/exchanges.`;
-    if (mode === 'open') return base + '\n\nOpen the coding round. Explain the format briefly, then state your first problem clearly with example input/output.';
-    if (mode === 'continue') return base + '\n\nGive feedback on their last submission or provide the next problem. If done, close with [END_ROUND].\nAppend: [FEEDBACK]{"good":"what worked","improve":"optimization needed"}[/FEEDBACK]';
-    if (mode === 'evaluate') return base + '\n\nThey just submitted code. Evaluate it completely. Is it correct? What are the complexities? Any edge cases? Then append: [FEEDBACK]{"good":"...","improve":"..."}[/FEEDBACK]';
-    if (mode === 'score') return `Rate this coding round out of 10. Reply ONLY: [SCORE]{"score":7.0}[/SCORE]`;
-  }
-
-  return 'Continue the interview professionally.';
-}
-
-function parseResponse(raw) {
-  const fbMatch = raw.match(/\[FEEDBACK\]([\s\S]*?)\[\/FEEDBACK\]/);
-  const isEnding = raw.includes('[END_ROUND]');
-  const scoreMatch = raw.match(/\[SCORE\]([\s\S]*?)\[\/SCORE\]/);
-
-  let msg = raw
-    .replace(/\[FEEDBACK\][\s\S]*?\[\/FEEDBACK\]/g, '')
-    .replace(/\[END_ROUND\]/g, '')
-    .replace(/\[SCORE\][\s\S]*?\[\/SCORE\]/g, '')
-    .trim();
-
-  let feedback = null;
-  if (fbMatch) {
-    try { feedback = JSON.parse(fbMatch[1]); }
-    catch (e) { }
-  }
-
-  return { msg, feedback, isEnding };
-}
-
-function cleanResponse(raw) {
-  return raw
-    .replace(/\[FEEDBACK\][\s\S]*?\[\/FEEDBACK\]/g, '')
-    .replace(/\[END_ROUND\]/g, '')
-    .replace(/\[SCORE\][\s\S]*?\[\/SCORE\]/g, '')
-    .trim();
-}
-
-// UI MESSAGES
-function addMessage(role, text, round, feedback = null) {
-  const area = document.getElementById('transcript');
-  const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-  const avatars = { interviewer: '👤', me: '👤' };
-  const roleLabels = { interviewer: 'Interviewer', me: state.user.name || 'You' };
-
-  const msg = document.createElement('div');
-  msg.className = 'message ' + (role === 'me' ? 'from-me' : '');
-
-  let fbHtml = '';
-  if (feedback && role !== 'me') {
-    const isMixed = !!feedback.improve;
-    fbHtml = `
-      <div class="msg-feedback ${isMixed ? 'feedback-improve' : 'feedback-good'}">
-        <div class="feedback-header">${isMixed ? '💡 Feedback' : '✅ Feedback'}</div>
-        ${feedback.good ? `<div class="feedback-item">✓ ${escapeHtml(feedback.good)}</div>` : ''}
-        ${feedback.improve ? `<div class="feedback-item">• ${escapeHtml(feedback.improve)}</div>` : ''}
-      </div>
-    `;
-  }
-
-  msg.innerHTML = `
-    <div class="msg-avatar">${avatars[role] || '👤'}</div>
-    <div class="msg-content">
-      <div class="msg-name">${roleLabels[role] || role}</div>
-      <div class="msg-bubble">${escapeHtml(text)}</div>
-      ${fbHtml}
-      <div class="msg-time">${now}</div>
-    </div>
-  `;
-
-  area.appendChild(msg);
-  area.scrollTop = area.scrollHeight;
-}
-
-function addSystemMessage(text) {
-  const area = document.getElementById('transcript');
-  const msg = document.createElement('div');
-  msg.textContent = text;
-  msg.style.cssText = 'text-align:center;font-size:11px;color:var(--text-tertiary);padding:8px;margin:4px 0';
-  area.appendChild(msg);
-  area.scrollTop = area.scrollHeight;
-}
-
-function updateProgressDots() {
-  const dots = document.querySelectorAll('.progress-dot');
-  const qCount = state.history.filter(h => h.role === 'user').length;
-  dots.forEach((dot, i) => {
-    if (i < qCount - 1) dot.classList.add('done');
-    else if (i === qCount - 1) dot.classList.add('active');
-    else dot.classList.remove('done', 'active');
+// API
+async function callAPI(system, userMessage) {
+  const response = await fetch(GROQ_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${config.apiKey}`
+    },
+    body: JSON.stringify({
+      model: GROQ_MODEL,
+      max_tokens: 200,
+      temperature: 0.7,
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user', content: userMessage }
+      ]
+    })
   });
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error?.message || `Status ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content || '';
 }
 
-function updateProgressUI() {
-  for (let i = 1; i <= 3; i++) {
-    const el = document.getElementById('r' + i);
-    if (!el) continue;
-    if (state.roundsDone[i]) {
-      el.className = 'round-indicator complete';
-      el.querySelector('.round-dot').textContent = '✓';
-    } else if (state.currentRound === i) {
-      el.className = 'round-indicator active';
-    } else {
-      el.className = 'round-indicator pending';
+// SPEECH
+function initSpeechRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return;
+
+  speechRec = new SR();
+  speechRec.continuous = false;
+  speechRec.interimResults = false;
+  speechRec.lang = 'en-US';
+
+  speechRec.onstart = () => {
+    isListening = true;
+    document.getElementById('micBtn').classList.add('listening');
+    setState('Listening…', 'Speak now...');
+  };
+
+  speechRec.onend = () => {
+    isListening = false;
+    document.getElementById('micBtn').classList.remove('listening');
+  };
+
+  speechRec.onresult = (e) => {
+    let transcript = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      transcript += e.results[i][0].transcript + ' ';
     }
+    if (transcript.trim()) {
+      submitAnswer(transcript.trim());
+    }
+  };
+
+  speechRec.onerror = (e) => {
+    isListening = false;
+    document.getElementById('micBtn').classList.remove('listening');
+    if (e.error !== 'no-speech') {
+      console.error('Speech error:', e.error);
+    }
+  };
+}
+
+function toggleMic() {
+  if (!speechRec) {
+    document.getElementById('textInput').classList.add('show');
+    setState('Manual Input', 'Type your answer');
+    return;
+  }
+
+  if (isListening) {
+    speechRec.stop();
+  } else {
+    speechRec.start();
   }
 }
 
-// TEXT TO SPEECH
-function speakText(text, onDone) {
-  speech.synthesis.cancel();
+function submitText() {
+  const text = document.getElementById('answerInput').value.trim();
+  if (text) {
+    document.getElementById('answerInput').value = '';
+    submitAnswer(text);
+  }
+}
+
+function speak(text) {
+  speechSynth.cancel();
   const clean = text.replace(/\[[\s\S]*?\]/g, '').trim();
   const utt = new SpeechSynthesisUtterance(clean);
   utt.rate = 0.95;
-  utt.onend = () => onDone && onDone();
-  utt.onerror = () => onDone && onDone();
-  speech.synthesis.speak(utt);
+  speechSynth.speak(utt);
 }
 
-// NAVIGATION & STATE
-function navigateTo(page) {
-  document.querySelectorAll('.page-container').forEach(p => p.classList.remove('active'));
-  document.getElementById(page + 'Page').classList.add('active');
-
-  const titles = {
-    upload: '📋 Resume Interview',
-    interview: '🎤 Interview',
-    scorecard: '🏆 Results'
-  };
-  document.getElementById('pageTitle').textContent = titles[page] || 'PrepAI';
+// UI
+function addMessage(role, text) {
+  const transcript = document.getElementById('transcript');
+  const msg = document.createElement('div');
+  msg.className = `message ${role === 'user' ? 'from-me' : ''}`;
+  
+  const avatar = document.createElement('div');
+  avatar.className = `msg-avatar ${role === 'user' ? 'user' : 'bot'}`;
+  avatar.textContent = role === 'user' ? '👤' : '👨‍💼';
+  
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.textContent = text;
+  
+  msg.appendChild(avatar);
+  msg.appendChild(bubble);
+  transcript.appendChild(msg);
+  transcript.scrollTop = transcript.scrollHeight;
 }
 
-function resetInterview() {
-  speech.synthesis.cancel();
-  try { speech.recognition.stop(); } catch (e) { }
-
-  state.currentRound = 0;
-  state.history = [];
-  state.qaLog = [];
-  state.scores = { 1: null, 2: null, 3: null };
-
-  document.getElementById('uploadZone').style.display = 'block';
-  document.getElementById('previewBox').style.display = 'none';
-  document.getElementById('roundsGrid').style.display = 'none';
-  document.getElementById('progressSection').style.display = 'none';
-  document.getElementById('fileInput').value = '';
-
-  setSpeechState('idle');
-  navigateTo('upload');
-  saveState();
-  toast('Reset', 'Ready for a new interview', 'success');
+function showLoading() {
+  const transcript = document.getElementById('transcript');
+  const loader = document.createElement('div');
+  loader.className = 'loading';
+  loader.id = 'loader';
+  loader.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+  transcript.appendChild(loader);
+  transcript.scrollTop = transcript.scrollHeight;
 }
 
-function endCurrentRound() {
-  if (!state.currentRound) return;
-  endRound();
+function removeLoading() {
+  const loader = document.getElementById('loader');
+  if (loader) loader.remove();
 }
 
-// MODALS
-function openModal(id) {
-  document.getElementById(id).classList.add('show');
+function setState(state, hint) {
+  document.getElementById('state').textContent = state;
+  document.getElementById('hint').textContent = hint;
 }
 
-function closeModal(id) {
-  document.getElementById(id).classList.remove('show');
+function resetApp() {
+  speechSynth.cancel();
+  if (speechRec) speechRec.stop();
+  config.resume = '';
+  config.history = [];
+  
+  document.getElementById('uploadPage').style.display = 'flex';
+  document.getElementById('interviewPage').classList.remove('active');
+  document.getElementById('transcript').innerHTML = '';
+  document.getElementById('answerInput').value = '';
+  document.getElementById('textInput').classList.remove('show');
+  document.getElementById('micBtn').disabled = false;
+  
+  toast('Reset', 'success');
 }
 
-function saveSetup() {
-  const name = document.getElementById('inputName').value.trim();
-  const domain = document.getElementById('inputDomain').value.trim();
-  const key = document.getElementById('inputKey').value.trim();
-
-  if (!name) {
-    toast('Name required', 'Please enter your name', 'error');
-    return;
-  }
-
-  if (!state.keys.length && !key) {
-    toast('Key required', 'Add a free Groq key from console.groq.com', 'error');
-    return;
-  }
-
-  state.user.name = name;
-  state.user.domain = domain || 'Technology';
-
-  if (key && !state.keys.includes(key)) {
-    state.keys.push(key);
-  }
-
-  saveState();
-  syncUI();
-  closeModal('setupModal');
-  toast('Welcome!', 'Ready to start your interview', 'success');
-}
-
-function syncUI() {
-  const av = document.getElementById('userAvatar');
-  const name = document.getElementById('userName');
-  const role = document.getElementById('userRole');
-
-  if (state.user.name) {
-    av.textContent = state.user.name[0].toUpperCase();
-    name.textContent = state.user.name;
-    role.textContent = state.user.domain || 'Not set';
-  }
-}
-
-// UTILITIES
-function toast(title, body, type = 'success') {
+// TOAST
+function toast(message, type = 'success') {
   const el = document.getElementById('toast');
-  document.getElementById('toastTitle').textContent = title;
-  document.getElementById('toastBody').textContent = body;
-  el.className = 'toast show ' + type;
-  setTimeout(() => el.classList.remove('show'), 3500);
-}
-
-function escapeHtml(text) {
-  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-  return String(text || '').replace(/[&<>"']/g, m => map[m]);
+  document.getElementById('toastTitle').textContent = message;
+  document.getElementById('toastBody').textContent = '';
+  el.className = `toast show ${type}`;
+  
+  setTimeout(() => el.classList.remove('show'), 3000);
 }
 </script>
 
