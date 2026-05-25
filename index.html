@@ -359,7 +359,7 @@ body{display:flex;flex-direction:column}
         <div class="upload-desc">Upload your resume and practice a complete 3-round interview with AI interviewers. Get real-time feedback and a detailed scorecard.</div>
       </div>
 
-      <div class="upload-zone" id="uploadZone" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
         <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" onchange="handleFileSelect(event)">
         <div class="upload-icon">📎</div>
         <div class="upload-zone-title">Drop your resume here</div>
@@ -680,27 +680,51 @@ function clearRecognitionDisplay() {
 // FILE UPLOAD
 function handleDrop(e) {
   e.preventDefault();
+  e.stopPropagation();
   document.getElementById('uploadZone').classList.remove('drag-active');
   const file = e.dataTransfer.files[0];
+  console.log('File dropped:', file); // Debug
   if (file) processFile(file);
 }
 
 function handleDragOver(e) {
   e.preventDefault();
+  e.stopPropagation();
   document.getElementById('uploadZone').classList.add('drag-active');
 }
 
 function handleDragLeave(e) {
+  e.preventDefault();
+  e.stopPropagation();
   document.getElementById('uploadZone').classList.remove('drag-active');
 }
 
 function handleFileSelect(e) {
   const file = e.target.files[0];
-  if (file) processFile(file);
+  console.log('File selected:', file); // Debug
+  if (file) {
+    console.log('Processing file:', file.name, file.size, file.type); // Debug
+    processFile(file);
+  } else {
+    console.log('No file selected'); // Debug
+    toast('No file', 'Please select a file', 'error');
+  }
 }
 
 async function processFile(file) {
+  if (!file) {
+    toast('No file', 'Please select a file', 'error');
+    return;
+  }
+
   const ext = file.name.split('.').pop().toLowerCase();
+  
+  // Validate file type
+  if (!['pdf', 'doc', 'docx', 'txt'].includes(ext)) {
+    toast('Invalid format', 'Use PDF, DOCX, or TXT', 'error');
+    return;
+  }
+
   const preview = document.getElementById('previewBox');
 
   document.getElementById('uploadZone').style.display = 'none';
@@ -708,37 +732,51 @@ async function processFile(file) {
   document.getElementById('previewName').textContent = file.name;
   document.getElementById('previewSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
   document.getElementById('previewIcon').textContent = ext === 'pdf' ? '📕' : ext === 'docx' || ext === 'doc' ? '📘' : '📄';
+  document.getElementById('previewContent').textContent = 'Reading file…';
 
   try {
     let text = '';
+    
     if (ext === 'txt') {
       text = await file.text();
     } else if (ext === 'pdf') {
       text = await extractPDFText(file);
-    } else {
-      text = await file.text();
-      text = text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    } else if (ext === 'docx' || ext === 'doc') {
+      // For DOCX/DOC, try to extract text or use placeholder
+      try {
+        text = await file.text();
+        text = text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      } catch (e) {
+        text = '[DOCX file loaded - content extraction not fully supported in browser]';
+      }
       if (text.length < 60) text = '[Resume content loaded]';
     }
 
+    if (!text || text.length < 10) {
+      text = '[Resume file loaded - proceeding with interview]';
+    }
+
     state.resume = text.slice(0, 4000);
-    document.getElementById('previewContent').textContent = state.resume.slice(0, 250) + '…';
+    document.getElementById('previewContent').textContent = state.resume.slice(0, 200) + '…';
     document.getElementById('roundsGrid').style.display = 'flex';
 
     // Detect coding language
-    const codingKeywords = ['python', 'javascript', 'java', 'c++', 'go', 'rust', 'kotlin', 'swift'];
-    state.codingLang = codingKeywords.find(k => text.toLowerCase().includes(k)) || 'python';
-    state.needsCoding = codingKeywords.some(k => text.toLowerCase().includes(k));
+    const codingKeywords = ['python', 'javascript', 'java', 'c++', 'go', 'rust', 'kotlin', 'swift', 'typescript', 'golang'];
+    const resumeLower = text.toLowerCase();
+    state.codingLang = codingKeywords.find(k => resumeLower.includes(k)) || 'python';
+    state.needsCoding = codingKeywords.some(k => resumeLower.includes(k));
 
     if (!state.needsCoding) {
       document.getElementById('round3Btn').style.opacity = '0.4';
       document.getElementById('round3Btn').onclick = null;
     }
 
-    toast('Resume uploaded ✓', 'Ready to start interview', 'success');
+    saveState();
+    toast('✅ Resume uploaded', 'Click "Start Round 1" to begin', 'success');
   } catch (err) {
-    document.getElementById('previewContent').textContent = 'Could not read file. Try .txt format.';
-    toast('Upload failed', 'Try a .txt version', 'error');
+    console.error('File processing error:', err);
+    document.getElementById('previewContent').textContent = 'Error reading file. Try .txt format instead.';
+    toast('Upload failed', err.message || 'Try a .txt version of your resume', 'error');
   }
 }
 
