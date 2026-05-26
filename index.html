@@ -425,6 +425,7 @@ function toggleVoiceMic(){
   if(vvs==='thinking')return;
   if(vvs==='listening'){stopListening();return;}
   if(!apiKey){openModal('setupModal');return;}
+  if(!recognition){toast2('Speech not available','Use text input instead','amber');return;}
   startListening();
 }
 
@@ -527,7 +528,11 @@ async function handleInterviewAnswer(text){
   setSpeech('thinking');addTyp('i');
   const raw=await callGroq(interviewHistory,getPrompt(currentRound,'continue'));
   removeTyp();
-  if(!raw){setSpeech('idle');toast2('Rate limited','Add a Groq key or wait ~1 min','amber');return;}
+  if(!raw){
+    setSpeech('idle');
+    toast2('API Error','Check console (F12) for details. Try a simpler response.','red');
+    return;
+  }
   const{msg,fb,ending}=parseR(raw);
   interviewHistory.push({role:'assistant',content:raw});
   if(fb)qaLog.push({round:currentRound,q:currentQ,a:text,fb});
@@ -685,16 +690,71 @@ function removeTyp(){if(typingEl){typingEl.remove();typingEl=null;}}
 
 async function callGroq(msgs,sys){
   try{
-    const r=await fetch(GROQ_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify({model:GROQ_MODEL,max_tokens:550,temperature:0.78,messages:[{role:'system',content:sys},...msgs]})});
+    const r=await fetch(GROQ_URL,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json; charset=utf-8',
+        'Authorization':'Bearer '+apiKey
+      },
+      body:JSON.stringify({
+        model:GROQ_MODEL,
+        max_tokens:550,
+        temperature:0.78,
+        messages:[{role:'system',content:sys},...msgs]
+      })
+    });
+    
     if(r.status===429){return null;}
-    if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||'API Error '+r.status);}
+    if(!r.ok){return null;}
+    
     const d=await r.json();
     let resp=d.choices?.[0]?.message?.content||'';
-    // Clean encoding issues - keep it simple
-    resp=resp.replace(/\ï/g,'').replace(/\*/g,' ').trim();
-    if(!resp||resp.length<5)return null;
+    
+    if(!resp)return null;
+    
+    // Log raw response for debugging
+    console.log('Raw API response length:', resp.length);
+    console.log('Raw bytes:', resp.charCodeAt(0), resp.charCodeAt(1), resp.charCodeAt(2));
+    
+    // Fix common encoding issues from Groq
+    resp = resp
+      .split('')
+      .map(char => {
+        const code = char.charCodeAt(0);
+        // Keep normal ASCII (32-126) and common accented chars
+        if(code >= 32 && code <= 126) return char;
+        if(code === 10 || code === 13) return char; // newline/carriage return
+        if(code > 127) return ''; // Remove non-ASCII that might be corrupted
+        return '';
+      })
+      .join('')
+      .trim();
+    
+    // Additional cleanup
+    resp = resp
+      .replace(/\s+/g, ' ')
+      .replace(/^[\s\-_\.\,]*/, '') // Remove leading junk
+      .trim();
+    
+    // Validate response has actual content
+    if(!resp || resp.length < 5) {
+      console.error('Response too short or empty');
+      return null;
+    }
+    
+    // Check if response is mostly junk characters
+    const words = resp.match(/[a-zA-Z]{3,}/g) || [];
+    if(words.length < 2) {
+      console.error('Response has no valid words');
+      return null;
+    }
+    
+    console.log('Clean response:', resp);
     return resp;
-  }catch(e){console.error(e);return null;}
+  }catch(e){
+    console.error('API Error:',e);
+    return null;
+  }
 }
 
 function showPage(id,el){
